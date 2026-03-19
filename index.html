@@ -1,316 +1,429 @@
-From: <Saved by Blink>
-Snapshot-Content-Location: http://127.0.0.1:13754/main/0/storage/emulated/0/Download/chess-openings-trainer-1.html
-Subject: Chess Openings Trainer
-Date: Thu, 19 Mar 2026 08:16:12 +0100
-MIME-Version: 1.0
-Content-Type: multipart/related;
-	type="text/html";
-	boundary="----MultipartBoundary--vaMxOr4SM3qhzUtbbQOan2ISEeM1Ku4OBBZYOmshrl----"
-
-
-------MultipartBoundary--vaMxOr4SM3qhzUtbbQOan2ISEeM1Ku4OBBZYOmshrl----
-Content-Type: text/html
-Content-ID: <frame-869A5FCD4DBC265E7E0E4C44AE3A168E@mhtml.blink>
-Content-Transfer-Encoding: binary
-Content-Location: http://127.0.0.1:13754/main/0/storage/emulated/0/Download/chess-openings-trainer-1.html
-
-<!DOCTYPE html><html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" type="text/css" href="cid:css-b214c782-c2be-4f61-be5a-882adec81829@mhtml.blink" />
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chess Openings Trainer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=EB+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
-
-
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0d0a06">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chess Trainer">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<style>
+:root {
+  --bg:#0d0a06; --panel:#111008; --card:#1a1409;
+  --hover:#281e10; --active:#2e2010;
+  --bl:#f0d9b5; --bd:#b58863;
+  --gold:#d4af37; --gdim:#8a6e22;
+  --text:#dfc9a3; --muted:#957050; --dim:#5a4030;
+  --border:#261b0c; --bord2:#352511;
+  --sel-l:#f5e87a; --sel-d:#c8a200;
+  --lm-l:#cdd26f; --lm-d:#aaa33a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; font-family:'EB Garamond',Georgia,serif; background:var(--bg); color:var(--text); }
+.app { display:flex; flex-direction:column; height:100%; }
+.hdr { display:flex; align-items:center; gap:12px; padding:11px 18px; background:var(--panel); border-bottom:1px solid var(--bord2); flex-shrink:0; }
+.hdr-icon { font-size:1.5rem; filter:drop-shadow(0 0 8px rgba(212,175,55,.5)); }
+.hdr-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--gold); letter-spacing:.03em; }
+.hdr-sub { font-style:italic; font-size:.82rem; color:var(--muted); }
+.body { display:flex; flex:1; overflow:hidden; position:relative; }
+/* Sidebar */
+.sidebar { width:250px; min-width:250px; display:flex; flex-direction:column; background:var(--panel); border-right:1px solid var(--bord2); overflow:hidden; flex-shrink:0; transition:transform .27s ease; }
+.sw { padding:10px; border-bottom:1px solid var(--border); }
+.si { width:100%; padding:7px 10px; background:var(--card); border:1px solid var(--bord2); border-radius:3px; color:var(--text); font-family:'EB Garamond',serif; font-size:.9rem; outline:none; transition:border-color .15s; }
+.si:focus { border-color:var(--gdim); }
+.si::placeholder { color:var(--dim); }
+.sc-label { padding:7px 12px 3px; font-size:.67rem; color:var(--dim); text-transform:uppercase; letter-spacing:.07em; }
+.scroll { flex:1; overflow-y:auto; padding:4px 7px 8px; }
+.scroll::-webkit-scrollbar { width:3px; }
+.scroll::-webkit-scrollbar-thumb { background:var(--bord2); border-radius:2px; }
+.oi { padding:8px 10px; margin-bottom:3px; border-radius:3px; border:1px solid transparent; cursor:pointer; transition:all .12s; }
+.oi:hover { background:var(--hover); border-color:var(--bord2); }
+.oi.act { background:var(--active); border-color:var(--gdim); }
+.oi-eco { font-size:.67rem; color:var(--gdim); letter-spacing:.05em; text-transform:uppercase; }
+.oi-name { font-family:'Playfair Display',serif; font-size:.87rem; line-height:1.25; }
+.oi-moves { font-size:.71rem; color:var(--dim); font-style:italic; margin-top:1px; }
+/* Main */
+.main { flex:1; display:flex; align-items:center; justify-content:center; padding:16px; overflow:auto; gap:20px; }
+.board-outer { display:flex; align-items:flex-start; gap:4px; }
+.rk-col { display:flex; flex-direction:column; }
+.rk { height:52px; width:14px; display:flex; align-items:center; justify-content:center; font-size:.63rem; color:var(--dim); }
+.board-inner { display:flex; flex-direction:column; }
+.cb { display:grid; grid-template-columns:repeat(8,52px); grid-template-rows:repeat(8,52px); border:2px solid #3c2c18; box-shadow:0 0 0 1px #5a3f22, 0 12px 50px rgba(0,0,0,.9); }
+.fl-row { display:flex; }
+.fl { width:52px; text-align:center; font-size:.63rem; color:var(--dim); padding-top:3px; }
+.sq { width:52px; height:52px; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; user-select:none; }
+.sq.lt { background:var(--bl); }
+.sq.dk { background:var(--bd); }
+.sq.sel.lt { background:var(--sel-l); }
+.sq.sel.dk { background:var(--sel-d); }
+.sq.lmv.lt { background:var(--lm-l); }
+.sq.lmv.dk { background:var(--lm-d); }
+.sq.chk { background:radial-gradient(circle at 50% 50%, #ff5555 0%, #cc0000 100%) !important; }
+.ldot { width:15px; height:15px; border-radius:50%; background:rgba(0,0,0,.22); position:absolute; pointer-events:none; z-index:1; }
+.lring { position:absolute; inset:2px; border:4px solid rgba(0,0,0,.22); pointer-events:none; z-index:1; }
+.pc { font-size:35px; line-height:1; pointer-events:none; z-index:2; position:relative; }
+.pc.w { color:#fff8e8; text-shadow:0 1px 0 #7a5020, 0 2px 5px rgba(0,0,0,.65); }
+.pc.b { color:#1a0e00; text-shadow:0 1px 0 #5a3a18, 0 2px 5px rgba(0,0,0,.55); }
+/* Controls */
+.ctrl { display:flex; flex-direction:column; gap:12px; width:210px; }
+.pill { display:flex; align-items:center; gap:9px; padding:8px 11px; background:var(--card); border:1px solid var(--bord2); border-radius:4px; font-size:.87rem; }
+.tdot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+.tdot.w { background:#fff8e8; box-shadow:0 0 0 1px #8a6030; }
+.tdot.b { background:#1a0e00; box-shadow:0 0 0 1px #5a3a1a; }
+.sec-lbl { font-size:.66rem; text-transform:uppercase; letter-spacing:.08em; color:var(--dim); margin-bottom:3px; }
+.hist { background:var(--card); border:1px solid var(--border); border-radius:4px; padding:8px 10px; min-height:50px; max-height:85px; overflow-y:auto; font-size:.8rem; color:var(--muted); font-style:italic; line-height:1.75; }
+.hist::-webkit-scrollbar { width:2px; }
+.hist::-webkit-scrollbar-thumb { background:var(--bord2); }
+.oc { background:var(--card); border:1px solid var(--gdim); border-left:3px solid var(--gold); border-radius:4px; padding:9px 11px; }
+.oc-title { font-family:'Playfair Display',serif; color:var(--gold); font-size:.88rem; margin-bottom:4px; }
+.oc-desc { font-size:.77rem; color:var(--muted); font-style:italic; line-height:1.45; }
+.step-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.step-info { font-size:.77rem; color:var(--dim); margin-left:auto; }
+.btn { padding:6px 12px; background:var(--card); border:1px solid var(--bord2); color:var(--text); font-family:'EB Garamond',serif; font-size:.84rem; cursor:pointer; border-radius:3px; transition:all .12s; white-space:nowrap; }
+.btn:hover:not(:disabled) { background:var(--hover); border-color:var(--gdim); color:var(--gold); }
+.btn.gold { background:#1c1505; border-color:var(--gdim); color:var(--gold); }
+.btn.gold:hover { background:#281e08; }
+.btn:disabled { opacity:.35; cursor:not-allowed; }
+.brow { display:flex; gap:5px; flex-wrap:wrap; }
+.hint { font-size:.73rem; color:var(--dim); line-height:1.5; }
+/* Mobile toggle button */
+.toggle-btn {
+  display:none; margin-left:auto;
+  align-items:center; gap:6px; padding:5px 13px;
+  background:var(--card); border:1px solid var(--bord2);
+  color:var(--gold); font-family:'EB Garamond',serif; font-size:.82rem;
+  cursor:pointer; border-radius:3px; transition:all .15s; flex-shrink:0;
+}
+.toggle-btn:hover { background:var(--hover); border-color:var(--gdim); }
+.arrow { display:inline-block; transition:transform .25s ease; font-style:normal; }
+/* Mobile */
+@media (max-width:680px) {
+  .hdr-sub { display:none; }
+  .toggle-btn { display:flex; }
+  .sidebar {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    min-width:unset; z-index:20;
+    transform:translateX(-100%); border-right:none;
+  }
+  .sidebar.open { transform:translateX(0); }
+  .main { flex-direction:column; padding:10px 6px; gap:10px; align-items:center; }
+  .cb  { grid-template-columns:repeat(8,min(42px,11vw)); grid-template-rows:repeat(8,min(42px,11vw)); }
+  .sq  { width:min(42px,11vw); height:min(42px,11vw); }
+  .rk  { height:min(42px,11vw); }
+  .fl  { width:min(42px,11vw); }
+  .pc  { font-size:min(28px,7.5vw); }
+  .ldot { width:11px; height:11px; }
+  .ctrl { width:100%; max-width:440px; }
+}
+</style>
 </head>
 <body>
 <div class="app">
   <div class="hdr">
-    <span class="hdr-icon">♟</span>
+    <span class="hdr-icon">&#9823;</span>
     <span class="hdr-title">Chess Openings Trainer</span>
-    <span class="hdr-sub">— etude des ouvertures classiques</span>
-    <button class="toggle-btn" id="toggleBtn">
-      Ouvertures&nbsp;<em class="arrow" id="arrow" style="transform: rotate(0deg);">▲</em>
+    <span class="hdr-sub">&#8212; etude des ouvertures classiques</span>
+    <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">
+      Ouvertures&nbsp;<em class="arrow" id="arrow">&#9650;</em>
     </button>
   </div>
   <div class="body">
     <div class="sidebar" id="sidebar">
       <div class="sw"><input type="text" class="si" id="search" placeholder="Rechercher ouverture, ECO..."></div>
-      <div class="sc-label" id="olabel">40 ouvertures</div>
-      <div class="scroll" id="olist"><div class="oi"><div class="oi-eco">A00</div><div class="oi-name">Ouverture Polonaise</div><div class="oi-moves">b4</div></div><div class="oi"><div class="oi-eco">A00</div><div class="oi-name">Attaque Grob</div><div class="oi-moves">g4</div></div><div class="oi"><div class="oi-eco">A04</div><div class="oi-name">Ouverture Reti</div><div class="oi-moves">Nf3</div></div><div class="oi"><div class="oi-eco">A10</div><div class="oi-name">Ouverture Anglaise</div><div class="oi-moves">c4</div></div><div class="oi"><div class="oi-eco">A45</div><div class="oi-name">Attaque Trompowsky</div><div class="oi-moves">d4 Nf6 Bg5</div></div><div class="oi"><div class="oi-eco">B01</div><div class="oi-name">Defense Scandinave</div><div class="oi-moves">e4 d5</div></div><div class="oi"><div class="oi-eco">B06</div><div class="oi-name">Defense Moderne</div><div class="oi-moves">e4 g6</div></div><div class="oi"><div class="oi-eco">B07</div><div class="oi-name">Defense Pirc</div><div class="oi-moves">e4 d6 d4 Nf6 Nc3 g6</div></div><div class="oi"><div class="oi-eco">B10</div><div class="oi-name">Defense Caro-Kann</div><div class="oi-moves">e4 c6</div></div><div class="oi act"><div class="oi-eco">B12</div><div class="oi-name">Caro-Kann Avancee</div><div class="oi-moves">e4 c6 d4 d5 e5</div></div><div class="oi"><div class="oi-eco">B20</div><div class="oi-name">Defense Sicilienne</div><div class="oi-moves">e4 c5</div></div><div class="oi"><div class="oi-eco">B21</div><div class="oi-name">Sicilienne Grand Prix</div><div class="oi-moves">e4 c5 Nc3 Nc6 f4</div></div><div class="oi"><div class="oi-eco">B23</div><div class="oi-name">Sicilienne Fermee</div><div class="oi-moves">e4 c5 Nc3 Nc6 g3</div></div><div class="oi"><div class="oi-eco">B70</div><div class="oi-name">Sicilienne Dragon</div><div class="oi-moves">e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6</div></div><div class="oi"><div class="oi-eco">B80</div><div class="oi-name">Sicilienne Scheveningen</div><div class="oi-moves">e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 e6</div></div><div class="oi"><div class="oi-eco">B90</div><div class="oi-name">Sicilienne Najdorf</div><div class="oi-moves">e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6</div></div><div class="oi"><div class="oi-eco">C00</div><div class="oi-name">Defense Francaise</div><div class="oi-moves">e4 e6</div></div><div class="oi"><div class="oi-eco">C02</div><div class="oi-name">Francaise Avancee</div><div class="oi-moves">e4 e6 d4 d5 e5</div></div><div class="oi"><div class="oi-eco">C21</div><div class="oi-name">Gambit Danois</div><div class="oi-moves">e4 e5 d4 exd4 c3</div></div><div class="oi"><div class="oi-eco">C30</div><div class="oi-name">Gambit du Roi</div><div class="oi-moves">e4 e5 f4</div></div><div class="oi"><div class="oi-eco">C40</div><div class="oi-name">Defense Petrov</div><div class="oi-moves">e4 e5 Nf3 Nf6</div></div><div class="oi"><div class="oi-eco">C41</div><div class="oi-name">Defense Philidor</div><div class="oi-moves">e4 e5 Nf3 d6</div></div><div class="oi"><div class="oi-eco">C45</div><div class="oi-name">Partie Ecossaise</div><div class="oi-moves">e4 e5 Nf3 Nc6 d4</div></div><div class="oi"><div class="oi-eco">C50</div><div class="oi-name">Partie Italienne</div><div class="oi-moves">e4 e5 Nf3 Nc6 Bc4</div></div><div class="oi"><div class="oi-eco">C51</div><div class="oi-name">Gambit Evans</div><div class="oi-moves">e4 e5 Nf3 Nc6 Bc4 Bc5 b4</div></div><div class="oi"><div class="oi-eco">C57</div><div class="oi-name">Deux Cavaliers Foie Frit</div><div class="oi-moves">e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7</div></div><div class="oi"><div class="oi-eco">C60</div><div class="oi-name">Ruy Lopez</div><div class="oi-moves">e4 e5 Nf3 Nc6 Bb5</div></div><div class="oi"><div class="oi-eco">C65</div><div class="oi-name">Ruy Lopez Berlin</div><div class="oi-moves">e4 e5 Nf3 Nc6 Bb5 Nf6</div></div><div class="oi"><div class="oi-eco">D02</div><div class="oi-name">Systeme de Londres</div><div class="oi-moves">d4 d5 Nf3 Nf6 Bf4</div></div><div class="oi"><div class="oi-eco">D06</div><div class="oi-name">Gambit de la Dame</div><div class="oi-moves">d4 d5 c4</div></div><div class="oi"><div class="oi-eco">D10</div><div class="oi-name">Defense Slave</div><div class="oi-moves">d4 d5 c4 c6</div></div><div class="oi"><div class="oi-eco">D20</div><div class="oi-name">Gambit de la Dame Accepte</div><div class="oi-moves">d4 d5 c4 dxc4</div></div><div class="oi"><div class="oi-eco">D30</div><div class="oi-name">Gambit de la Dame Refuse</div><div class="oi-moves">d4 d5 c4 e6</div></div><div class="oi"><div class="oi-eco">D43</div><div class="oi-name">Defense Semi-Slave</div><div class="oi-moves">d4 d5 c4 c6 Nc3 Nf6 Nf3 e6</div></div><div class="oi"><div class="oi-eco">D70</div><div class="oi-name">Defense Grunfeld</div><div class="oi-moves">d4 Nf6 c4 g6 Nc3 d5</div></div><div class="oi"><div class="oi-eco">E00</div><div class="oi-name">Ouverture Catalane</div><div class="oi-moves">d4 Nf6 c4 e6 g3</div></div><div class="oi"><div class="oi-eco">E10</div><div class="oi-name">Indienne de la Dame</div><div class="oi-moves">d4 Nf6 c4 e6 Nf3 b6</div></div><div class="oi"><div class="oi-eco">E20</div><div class="oi-name">Nimzo-Indienne</div><div class="oi-moves">d4 Nf6 c4 e6 Nc3 Bb4</div></div><div class="oi"><div class="oi-eco">E60</div><div class="oi-name">Indienne du Roi</div><div class="oi-moves">d4 Nf6 c4 g6 Nc3 Bg7 e4 d6</div></div><div class="oi"><div class="oi-eco">E80</div><div class="oi-name">Indienne du Roi Samisch</div><div class="oi-moves">d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3</div></div></div>
+      <div class="sc-label" id="olabel"></div>
+      <div class="scroll" id="olist"></div>
     </div>
     <div class="main">
       <div>
         <div class="board-outer">
-          <div class="rk-col" id="rk"><div class="rk">8</div><div class="rk">7</div><div class="rk">6</div><div class="rk">5</div><div class="rk">4</div><div class="rk">3</div><div class="rk">2</div><div class="rk">1</div></div>
+          <div class="rk-col" id="rk"></div>
           <div class="board-inner">
-            <div class="cb" id="cb"><div class="sq lt"><span class="pc b">♜</span></div><div class="sq dk"><span class="pc b">♞</span></div><div class="sq lt"><span class="pc b">♝</span></div><div class="sq dk"><span class="pc b">♛</span></div><div class="sq lt"><span class="pc b">♚</span></div><div class="sq dk"><span class="pc b">♝</span></div><div class="sq lt"><span class="pc b">♞</span></div><div class="sq dk"><span class="pc b">♜</span></div><div class="sq dk"><span class="pc b">♟</span></div><div class="sq lt"><span class="pc b">♟</span></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><span class="pc b">♟</span></div><div class="sq lt"><span class="pc b">♟</span></div><div class="sq dk"><span class="pc b">♟</span></div><div class="sq lt"><span class="pc b">♟</span></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"><span class="pc b">♟</span></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"><span class="pc b">♟</span></div><div class="sq dk lmv"><span class="pc w">♙</span></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><span class="pc w">♙</span></div><div class="sq lt lmv"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq lt"><span class="pc w">♙</span></div><div class="sq dk"><span class="pc w">♙</span></div><div class="sq lt"><span class="pc w">♙</span></div><div class="sq dk"></div><div class="sq lt"></div><div class="sq dk"><span class="pc w">♙</span></div><div class="sq lt"><span class="pc w">♙</span></div><div class="sq dk"><span class="pc w">♙</span></div><div class="sq dk"><span class="pc w">♖</span></div><div class="sq lt"><span class="pc w">♘</span></div><div class="sq dk"><span class="pc w">♗</span></div><div class="sq lt"><span class="pc w">♕</span></div><div class="sq dk"><span class="pc w">♔</span></div><div class="sq lt"><span class="pc w">♗</span></div><div class="sq dk"><span class="pc w">♘</span></div><div class="sq lt"><span class="pc w">♖</span></div></div>
-            <div class="fl-row" id="fl"><div class="fl">a</div><div class="fl">b</div><div class="fl">c</div><div class="fl">d</div><div class="fl">e</div><div class="fl">f</div><div class="fl">g</div><div class="fl">h</div></div>
+            <div class="cb" id="cb"></div>
+            <div class="fl-row" id="fl"></div>
           </div>
         </div>
       </div>
       <div class="ctrl">
         <div class="pill">
-          <div class="tdot b" id="tdot"></div>
-          <span id="stxt">Noirs a jouer</span>
+          <div class="tdot w" id="tdot"></div>
+          <span id="stxt">Blancs a jouer</span>
         </div>
-        <div id="oc" style="display: block;" class="oc">
-          <div class="oc-title" id="oct">B12 - Caro-Kann Avancee</div>
-          <div class="oc-desc" id="ocd">Les Blancs s'emparent de l'espace. Lutte positionnelle intense.</div>
+        <div id="oc" style="display:none" class="oc">
+          <div class="oc-title" id="oct"></div>
+          <div class="oc-desc" id="ocd"></div>
         </div>
-        <div id="sbar" style="display: flex;" class="step-row">
-          <button class="btn" id="bprev">← Prec</button>
-          <button class="btn" id="bnext" disabled="">Suiv →</button>
-          <span class="step-info" id="sinfo">5/5</span>
-          <button class="btn">Libre</button>
+        <div id="sbar" style="display:none" class="step-row">
+          <button class="btn" id="bprev" onclick="stepBack()">&larr; Prec</button>
+          <button class="btn" id="bnext" onclick="stepFwd()">Suiv &rarr;</button>
+          <span class="step-info" id="sinfo"></span>
+          <button class="btn" onclick="freePlay()">Libre</button>
         </div>
         <div>
           <div class="sec-lbl">Historique</div>
-          <div class="hist" id="hist"><span style="color:var(--dim)">1.</span> e4 c6 <span style="color:var(--dim)">2.</span> d4 d5 <span style="color:var(--dim)">3.</span> e5 </div>
+          <div class="hist" id="hist">Aucun coup joue.</div>
         </div>
         <div class="brow">
-          <button class="btn gold">↻ Reset</button>
-          <button class="btn">IA aleat.</button>
-          <button class="btn">Annuler</button>
+          <button class="btn gold" onclick="doReset()">&#8635; Reset</button>
+          <button class="btn" onclick="doAI()">IA aleat.</button>
+          <button class="btn" onclick="doUndo()">Annuler</button>
         </div>
         <div class="hint">Cliquez une piece puis la case de destination.</div>
       </div>
     </div>
   </div>
 </div>
-
-
-
-</body></html>
-------MultipartBoundary--vaMxOr4SM3qhzUtbbQOan2ISEeM1Ku4OBBZYOmshrl----
-Content-Type: text/css
-Content-Transfer-Encoding: binary
-Content-Location: https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap
-
-@charset "utf-8";
-
-@font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGFmQSNjdsmc35JDF1K5GRwUjcdlttVFm-rI7e8QL9wU6i1gmFJbvw.woff2") format("woff2"); unicode-range: U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
-
-@font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGFmQSNjdsmc35JDF1K5GRwUjcdlttVFm-rI7e8QL95U6i1gmFJbvw.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
-
-@font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGFmQSNjdsmc35JDF1K5GRwUjcdlttVFm-rI7e8QL9xU6i1gmFJbvw.woff2") format("woff2"); unicode-range: U+1F00-1FFF; }
-
-@font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGFmQSNjdsmc35JDF1K5GRwUjcdlttVFm-rI7e8QL9-U6i1gmFJbvw.woff2") format("woff2"); unicode-range: U+370-377, U+37A-37F, U+384-38A, U+38C, U+38E-3A1, U+3A3-3FF; }
-
-@font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGFmQSNjdsmc35JDF1K5GRwUjcdlttVFm-rI7e8QL9yU6i1gmFJbvw.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
-
-@font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGFmQSNjdsmc35JDF1K5GRwUjcdlttVFm-rI7e8QL9zU6i1gmFJbvw.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGFmQSNjdsmc35JDF1K5GRwUjcdlttVFm-rI7e8QL99U6i1gmFJ.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR4SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GRxSDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR5SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+1F00-1FFF; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR2SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+370-377, U+37A-37F, U+384-38A, U+38C, U+38E-3A1, U+3A3-3FF; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR6SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR7SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR1SDk_YAPI.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR4SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GRxSDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR5SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+1F00-1FFF; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR2SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+370-377, U+37A-37F, U+384-38A, U+38C, U+38E-3A1, U+3A3-3FF; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR6SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR7SDk_YAPIlWk.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/ebgaramond/v32/SlGUmQSNjdsmc35JDF1K5GR1SDk_YAPI.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face { font-family: "Playfair Display"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTXtXA-X-oE0qsEw.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
-
-@font-face { font-family: "Playfair Display"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTXt7A-X-oE0qsEw.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
-
-@font-face { font-family: "Playfair Display"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTXt_A-X-oE0qsEw.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face { font-family: "Playfair Display"; font-style: italic; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTXtHA-X-oE0o.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTjYgEM86xRbPQ.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
-
-@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTPYgEM86xRbPQ.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
-
-@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTLYgEM86xRbPQ.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgEM86xQ.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTjYgEM86xRbPQ.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
-
-@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTPYgEM86xRbPQ.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
-
-@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTLYgEM86xRbPQ.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 700; font-display: swap; src: url("https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgEM86xQ.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-------MultipartBoundary--vaMxOr4SM3qhzUtbbQOan2ISEeM1Ku4OBBZYOmshrl----
-Content-Type: text/css
-Content-Transfer-Encoding: binary
-Content-Location: cid:css-b214c782-c2be-4f61-be5a-882adec81829@mhtml.blink
-
-@charset "utf-8";
-
-:root { --bg: #0d0a06; --panel: #111008; --card: #1a1409; --hover: #281e10; --active: #2e2010; --bl: #f0d9b5; --bd: #b58863; --gold: #d4af37; --gdim: #8a6e22; --text: #dfc9a3; --muted: #957050; --dim: #5a4030; --border: #261b0c; --bord2: #352511; --sel-l: #f5e87a; --sel-d: #c8a200; --lm-l: #cdd26f; --lm-d: #aaa33a; }
-
-* { margin: 0px; padding: 0px; box-sizing: border-box; }
-
-html, body { width: 100%; height: 100%; overflow: hidden; font-family: "EB Garamond", Georgia, serif; background: var(--bg); color: var(--text); }
-
-.app { display: flex; flex-direction: column; height: 100%; }
-
-.hdr { display: flex; align-items: center; gap: 12px; padding: 11px 18px; background: var(--panel); border-bottom: 1px solid var(--bord2); flex-shrink: 0; }
-
-.hdr-icon { font-size: 1.5rem; filter: drop-shadow(rgba(212, 175, 55, 0.5) 0px 0px 8px); }
-
-.hdr-title { font-family: "Playfair Display", serif; font-size: 1.2rem; font-weight: 700; color: var(--gold); letter-spacing: 0.03em; }
-
-.hdr-sub { font-style: italic; font-size: 0.82rem; color: var(--muted); }
-
-.body { display: flex; flex: 1 1 0%; overflow: hidden; position: relative; }
-
-.sidebar { width: 250px; min-width: 250px; display: flex; flex-direction: column; background: var(--panel); border-right: 1px solid var(--bord2); overflow: hidden; flex-shrink: 0; transition: transform 0.27s; }
-
-.sw { padding: 10px; border-bottom: 1px solid var(--border); }
-
-.si { width: 100%; padding: 7px 10px; background: var(--card); border: 1px solid var(--bord2); border-radius: 3px; color: var(--text); font-family: "EB Garamond", serif; font-size: 0.9rem; outline: none; transition: border-color 0.15s; }
-
-.si:focus { border-color: var(--gdim); }
-
-.si::placeholder { color: var(--dim); }
-
-.sc-label { padding: 7px 12px 3px; font-size: 0.67rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.07em; }
-
-.scroll { flex: 1 1 0%; overflow-y: auto; padding: 4px 7px 8px; }
-
-.scroll::-webkit-scrollbar { width: 3px; }
-
-.scroll::-webkit-scrollbar-thumb { background: var(--bord2); border-radius: 2px; }
-
-.oi { padding: 8px 10px; margin-bottom: 3px; border-radius: 3px; border: 1px solid transparent; cursor: pointer; transition: 0.12s; }
-
-.oi:hover { background: var(--hover); border-color: var(--bord2); }
-
-.oi.act { background: var(--active); border-color: var(--gdim); }
-
-.oi-eco { font-size: 0.67rem; color: var(--gdim); letter-spacing: 0.05em; text-transform: uppercase; }
-
-.oi-name { font-family: "Playfair Display", serif; font-size: 0.87rem; line-height: 1.25; }
-
-.oi-moves { font-size: 0.71rem; color: var(--dim); font-style: italic; margin-top: 1px; }
-
-.main { flex: 1 1 0%; display: flex; align-items: center; justify-content: center; padding: 16px; overflow: auto; gap: 20px; }
-
-.board-outer { display: flex; align-items: flex-start; gap: 4px; }
-
-.rk-col { display: flex; flex-direction: column; }
-
-.rk { height: 52px; width: 14px; display: flex; align-items: center; justify-content: center; font-size: 0.63rem; color: var(--dim); }
-
-.board-inner { display: flex; flex-direction: column; }
-
-.cb { display: grid; grid-template-columns: repeat(8, 52px); grid-template-rows: repeat(8, 52px); border: 2px solid rgb(60, 44, 24); box-shadow: rgb(90, 63, 34) 0px 0px 0px 1px, rgba(0, 0, 0, 0.9) 0px 12px 50px; }
-
-.fl-row { display: flex; }
-
-.fl { width: 52px; text-align: center; font-size: 0.63rem; color: var(--dim); padding-top: 3px; }
-
-.sq { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; user-select: none; }
-
-.sq.lt { background: var(--bl); }
-
-.sq.dk { background: var(--bd); }
-
-.sq.sel.lt { background: var(--sel-l); }
-
-.sq.sel.dk { background: var(--sel-d); }
-
-.sq.lmv.lt { background: var(--lm-l); }
-
-.sq.lmv.dk { background: var(--lm-d); }
-
-.sq.chk { background: radial-gradient(circle, rgb(255, 85, 85) 0%, rgb(204, 0, 0) 100%) !important; }
-
-.ldot { width: 15px; height: 15px; border-radius: 50%; background: rgba(0, 0, 0, 0.22); position: absolute; pointer-events: none; z-index: 1; }
-
-.lring { position: absolute; inset: 2px; border: 4px solid rgba(0, 0, 0, 0.22); pointer-events: none; z-index: 1; }
-
-.pc { font-size: 35px; line-height: 1; pointer-events: none; z-index: 2; position: relative; }
-
-.pc.w { color: rgb(255, 248, 232); text-shadow: rgb(122, 80, 32) 0px 1px 0px, rgba(0, 0, 0, 0.65) 0px 2px 5px; }
-
-.pc.b { color: rgb(26, 14, 0); text-shadow: rgb(90, 58, 24) 0px 1px 0px, rgba(0, 0, 0, 0.55) 0px 2px 5px; }
-
-.ctrl { display: flex; flex-direction: column; gap: 12px; width: 210px; }
-
-.pill { display: flex; align-items: center; gap: 9px; padding: 8px 11px; background: var(--card); border: 1px solid var(--bord2); border-radius: 4px; font-size: 0.87rem; }
-
-.tdot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-
-.tdot.w { background: rgb(255, 248, 232); box-shadow: rgb(138, 96, 48) 0px 0px 0px 1px; }
-
-.tdot.b { background: rgb(26, 14, 0); box-shadow: rgb(90, 58, 26) 0px 0px 0px 1px; }
-
-.sec-lbl { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); margin-bottom: 3px; }
-
-.hist { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; min-height: 50px; max-height: 85px; overflow-y: auto; font-size: 0.8rem; color: var(--muted); font-style: italic; line-height: 1.75; }
-
-.hist::-webkit-scrollbar { width: 2px; }
-
-.hist::-webkit-scrollbar-thumb { background: var(--bord2); }
-
-.oc { background: var(--card); border-top-color: ; border-top-style: ; border-top-width: ; border-right-color: ; border-right-style: ; border-right-width: ; border-bottom-color: ; border-bottom-style: ; border-bottom-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; border-left: 3px solid var(--gold); border-radius: 4px; padding: 9px 11px; }
-
-.oc-title { font-family: "Playfair Display", serif; color: var(--gold); font-size: 0.88rem; margin-bottom: 4px; }
-
-.oc-desc { font-size: 0.77rem; color: var(--muted); font-style: italic; line-height: 1.45; }
-
-.step-row { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
-
-.step-info { font-size: 0.77rem; color: var(--dim); margin-left: auto; }
-
-.btn { padding: 6px 12px; background: var(--card); border: 1px solid var(--bord2); color: var(--text); font-family: "EB Garamond", serif; font-size: 0.84rem; cursor: pointer; border-radius: 3px; transition: 0.12s; white-space: nowrap; }
-
-.btn:hover:not(:disabled) { background: var(--hover); border-color: var(--gdim); color: var(--gold); }
-
-.btn.gold { background: rgb(28, 21, 5); border-color: var(--gdim); color: var(--gold); }
-
-.btn.gold:hover { background: rgb(40, 30, 8); }
-
-.btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-.brow { display: flex; gap: 5px; flex-wrap: wrap; }
-
-.hint { font-size: 0.73rem; color: var(--dim); line-height: 1.5; }
-
-.toggle-btn { display: none; margin-left: auto; align-items: center; gap: 6px; padding: 5px 13px; background: var(--card); border: 1px solid var(--bord2); color: var(--gold); font-family: "EB Garamond", serif; font-size: 0.82rem; cursor: pointer; border-radius: 3px; transition: 0.15s; flex-shrink: 0; }
-
-.toggle-btn:hover { background: var(--hover); border-color: var(--gdim); }
-
-.arrow { display: inline-block; transition: transform 0.25s; font-style: normal; }
-
-@media (max-width: 680px) {
-  .hdr-sub { display: none; }
-  .toggle-btn { display: flex; }
-  .sidebar { position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; min-width: unset; z-index: 20; transform: translateX(-100%); border-right: none; }
-  .sidebar.open { transform: translateX(0px); }
-  .main { flex-direction: column; padding: 10px 6px; gap: 10px; align-items: center; }
-  .cb { grid-template-columns: repeat(8, min(42px, 11vw)); grid-template-rows: repeat(8, min(42px, 11vw)); }
-  .sq { width: min(42px, 11vw); height: min(42px, 11vw); }
-  .rk { height: min(42px, 11vw); }
-  .fl { width: min(42px, 11vw); }
-  .pc { font-size: min(28px, 7.5vw); }
-  .ldot { width: 11px; height: 11px; }
-  .ctrl { width: 100%; max-width: 440px; }
+<script>
+var OPENINGS=[
+  {eco:"A00",name:"Ouverture Polonaise",moves:["b4"],desc:"Controle le centre par le flanc en avancant le pion b des le depart."},
+  {eco:"A00",name:"Attaque Grob",moves:["g4"],desc:"Avancement immediat du pion g. Agressif et inhabituel, cree des desequilibres."},
+  {eco:"A04",name:"Ouverture Reti",moves:["Nf3"],desc:"Ouverture hypermoderne : les Blancs controlent le centre avec leurs pieces."},
+  {eco:"A10",name:"Ouverture Anglaise",moves:["c4"],desc:"Conteste le centre avec le pion c. Jeu positionnel riche et varie."},
+  {eco:"A45",name:"Attaque Trompowsky",moves:["d4","Nf6","Bg5"],desc:"Les Blancs clouent le cavalier adverse, creant des positions inhabituelles."},
+  {eco:"B01",name:"Defense Scandinave",moves:["e4","d5"],desc:"Les Noirs challengent directement le centre des le premier coup."},
+  {eco:"B06",name:"Defense Moderne",moves:["e4","g6"],desc:"Les Noirs laissent les Blancs construire un grand centre puis l'attaquent."},
+  {eco:"B07",name:"Defense Pirc",moves:["e4","d6","d4","Nf6","Nc3","g6"],desc:"Posture defensive puis contre-attaque pour dynamiter le centre blanc."},
+  {eco:"B10",name:"Defense Caro-Kann",moves:["e4","c6"],desc:"Defense solide preparant d5. Structure de pions saine sans faiblesses."},
+  {eco:"B12",name:"Caro-Kann Avancee",moves:["e4","c6","d4","d5","e5"],desc:"Les Blancs s'emparent de l'espace. Lutte positionnelle intense."},
+  {eco:"B20",name:"Defense Sicilienne",moves:["e4","c5"],desc:"La reponse la plus populaire a 1.e4. Jeu asymetrique et desequilibre."},
+  {eco:"B21",name:"Sicilienne Grand Prix",moves:["e4","c5","Nc3","Nc6","f4"],desc:"Attaque aggressive sur l'aile roi avant le contre-jeu des Noirs."},
+  {eco:"B23",name:"Sicilienne Fermee",moves:["e4","c5","Nc3","Nc6","g3"],desc:"Les Blancs evitent les complications ouvertes avec une fianchette."},
+  {eco:"B70",name:"Sicilienne Dragon",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6"],desc:"Une des lignes les plus tranchantes. Fou en fianchette devastateur."},
+  {eco:"B80",name:"Sicilienne Scheveningen",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","e6"],desc:"Systeme flexible avec petit centre solide. L'arme de Kasparov."},
+  {eco:"B90",name:"Sicilienne Najdorf",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6"],desc:"L'ouverture la plus riche en theorie. L'arme de Fischer et Kasparov."},
+  {eco:"C00",name:"Defense Francaise",moves:["e4","e6"],desc:"Defense solide avec structure saine. Fou passif en c8 comme inconvenient."},
+  {eco:"C02",name:"Francaise Avancee",moves:["e4","e6","d4","d5","e5"],desc:"Les Blancs gagnent de l'espace. Attaques des deux cotes du plateau."},
+  {eco:"C21",name:"Gambit Danois",moves:["e4","e5","d4","exd4","c3"],desc:"Sacrifice de deux pions pour un developpement foudroyant."},
+  {eco:"C30",name:"Gambit du Roi",moves:["e4","e5","f4"],desc:"Gambit romantique pour developpement rapide. Aime de Morphy et Anderssen."},
+  {eco:"C40",name:"Defense Petrov",moves:["e4","e5","Nf3","Nf6"],desc:"Attaque symetrique. Tres solide mais considere passif au haut niveau."},
+  {eco:"C41",name:"Defense Philidor",moves:["e4","e5","Nf3","d6"],desc:"Solide mais passif. Accorde aux Blancs un fort controle central."},
+  {eco:"C45",name:"Partie Ecossaise",moves:["e4","e5","Nf3","Nc6","d4"],desc:"Ouverture du centre immediate. Popularisee par Kasparov."},
+  {eco:"C50",name:"Partie Italienne",moves:["e4","e5","Nf3","Nc6","Bc4"],desc:"Vise le point f7. Parmi les plus anciennes, jeu tactique riche."},
+  {eco:"C51",name:"Gambit Evans",moves:["e4","e5","Nf3","Nc6","Bc4","Bc5","b4"],desc:"Sacrifice du pion b pour developpement rapide. Chef-d'oeuvre romantique."},
+  {eco:"C57",name:"Deux Cavaliers Foie Frit",moves:["e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","d5","exd5","Nxd5","Nxf7"],desc:"Sacrifice spectaculaire sur f7. Deux pions pour la piece avec forte attaque."},
+  {eco:"C60",name:"Ruy Lopez",moves:["e4","e5","Nf3","Nc6","Bb5"],desc:"L'ouverture la plus classique. Pression strategique durable sur le cavalier."},
+  {eco:"C65",name:"Ruy Lopez Berlin",moves:["e4","e5","Nf3","Nc6","Bb5","Nf6"],desc:"Le Mur de Berlin. Defense ultra-solide. Rendue celebre par Kramnik en 2000."},
+  {eco:"D02",name:"Systeme de Londres",moves:["d4","d5","Nf3","Nf6","Bf4"],desc:"Ouverture solide et systematique. Tres populaire en club, peu de theorie."},
+  {eco:"D06",name:"Gambit de la Dame",moves:["d4","d5","c4"],desc:"Offre le pion c pour controler le centre. Pierre angulaire des echecs positionnels."},
+  {eco:"D10",name:"Defense Slave",moves:["d4","d5","c4","c6"],desc:"Defense solide au GDR. Soutient d5 sans bloquer le fou en c8."},
+  {eco:"D20",name:"Gambit de la Dame Accepte",moves:["d4","d5","c4","dxc4"],desc:"Les Noirs acceptent et doivent etre precis pour equaliser."},
+  {eco:"D30",name:"Gambit de la Dame Refuse",moves:["d4","d5","c4","e6"],desc:"La reponse classique. Position solide, populaire a tous les niveaux."},
+  {eco:"D43",name:"Defense Semi-Slave",moves:["d4","d5","c4","c6","Nc3","Nf6","Nf3","e6"],desc:"Combinaison riche de la Slave et du GDR. Theorie tres intense."},
+  {eco:"D70",name:"Defense Grunfeld",moves:["d4","Nf6","c4","g6","Nc3","d5"],desc:"Laisse un centre massif aux Blancs puis l'attaque avec les pieces."},
+  {eco:"E00",name:"Ouverture Catalane",moves:["d4","Nf6","c4","e6","g3"],desc:"Pression du GDR combinee a une fianchette royale. Tres populaire au top."},
+  {eco:"E10",name:"Indienne de la Dame",moves:["d4","Nf6","c4","e6","Nf3","b6"],desc:"Fianchette du fou pour controler la grande diagonale. Solide et hypermoderne."},
+  {eco:"E20",name:"Nimzo-Indienne",moves:["d4","Nf6","c4","e6","Nc3","Bb4"],desc:"Les Noirs clouent le cavalier et contestent le centre. Tres respectee contre d4."},
+  {eco:"E60",name:"Indienne du Roi",moves:["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6"],desc:"Laisse un grand centre aux Blancs et l'attaque dynamiquement. Arme de Fischer."},
+  {eco:"E80",name:"Indienne du Roi Samisch",moves:["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","f3"],desc:"Centre massif des Blancs et attaque directe sur le roi noir."}
+];
+
+var PC={
+  w:{k:"\u2654",q:"\u2655",r:"\u2656",b:"\u2657",n:"\u2658",p:"\u2659"},
+  b:{k:"\u265A",q:"\u265B",r:"\u265C",b:"\u265D",n:"\u265E",p:"\u265F"}
+};
+
+var game,selSq=null,legalT=[],lmFrom=null,lmTo=null;
+var guideMode=false,guideStep=0,guideOp=null,activeIdx=-1,movStack=[];
+var sidebarOpen=false;
+
+function toggleSidebar(){
+  sidebarOpen=!sidebarOpen;
+  document.getElementById("sidebar").classList.toggle("open",sidebarOpen);
+  document.getElementById("arrow").style.transform=sidebarOpen?"rotate(180deg)":"rotate(0deg)";
 }
-------MultipartBoundary--vaMxOr4SM3qhzUtbbQOan2ISEeM1Ku4OBBZYOmshrl------
+function closeSidebar(){
+  sidebarOpen=false;
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("arrow").style.transform="rotate(0deg)";
+}
+
+function init(){
+  if(typeof Chess==="undefined"){
+    document.querySelector(".main").innerHTML="<div style='color:var(--gold);text-align:center;padding:40px;line-height:2;font-size:1rem'><div style='font-size:2rem'>&#9888;</div><br>Moteur chess.js non charge.<br><small style='color:var(--muted)'>Verifiez votre connexion et rechargez.</small></div>";
+    return;
+  }
+  game=new Chess();
+  buildCoords();
+  renderBoard();
+  renderList();
+  document.getElementById("search").addEventListener("input",renderList);
+}
+
+function buildCoords(){
+  var rk=document.getElementById("rk"),fl=document.getElementById("fl");
+  for(var r=8;r>=1;r--){var d=document.createElement("div");d.className="rk";d.textContent=r;rk.appendChild(d);}
+  var f="abcdefgh";
+  for(var i=0;i<8;i++){var d2=document.createElement("div");d2.className="fl";d2.textContent=f[i];fl.appendChild(d2);}
+}
+
+function renderBoard(){
+  var el=document.getElementById("cb");
+  el.innerHTML="";
+  var brd=game.board(),files="abcdefgh",inChk=game.in_check(),turn=game.turn();
+  for(var r=0;r<8;r++){
+    for(var c=0;c<8;c++){
+      (function(sq,piece,isLt){
+        var d=document.createElement("div");
+        d.className="sq "+(isLt?"lt":"dk");
+        if(selSq===sq)d.classList.add("sel");
+        if(sq===lmFrom||sq===lmTo)d.classList.add("lmv");
+        if(inChk&&piece&&piece.type==="k"&&piece.color===turn)d.classList.add("chk");
+        if(legalT.indexOf(sq)!==-1){
+          var ind=document.createElement("div");
+          ind.className=piece?"lring":"ldot";
+          d.appendChild(ind);
+        }
+        if(piece){
+          var p=document.createElement("span");
+          p.className="pc "+piece.color;
+          p.textContent=PC[piece.color][piece.type];
+          d.appendChild(p);
+        }
+        d.addEventListener("click",function(){handleClick(sq);});
+        el.appendChild(d);
+      })(files[c]+(8-r),brd[r][c],(r+c)%2===0);
+    }
+  }
+  updateStatus();updateHist();
+}
+
+function handleClick(sq){
+  if(guideMode)return;
+  var piece=game.get(sq);
+  if(selSq){
+    if(legalT.indexOf(sq)!==-1){
+      var mv=game.move({from:selSq,to:sq,promotion:"q"});
+      if(mv){lmFrom=mv.from;lmTo=mv.to;movStack.push({f:mv.from,t:mv.to});}
+      selSq=null;legalT=[];renderBoard();return;
+    }
+    if(piece&&piece.color===game.turn()){
+      selSq=sq;legalT=game.moves({square:sq,verbose:true}).map(function(m){return m.to;});
+    }else{selSq=null;legalT=[];}
+  }else{
+    if(piece&&piece.color===game.turn()){
+      selSq=sq;legalT=game.moves({square:sq,verbose:true}).map(function(m){return m.to;});
+    }
+  }
+  renderBoard();
+}
+
+function updateStatus(){
+  var dot=document.getElementById("tdot"),txt=document.getElementById("stxt"),t=game.turn();
+  dot.className="tdot "+t;
+  if(game.in_checkmate())txt.textContent=(t==="w"?"Les Noirs":"Les Blancs")+" gagnent !";
+  else if(game.in_stalemate())txt.textContent="Pat - Nulle !";
+  else if(game.in_draw())txt.textContent="Nulle !";
+  else if(game.in_check())txt.textContent=(t==="w"?"Blancs":"Noirs")+" en echec !";
+  else txt.textContent=(t==="w"?"Blancs":"Noirs")+" a jouer";
+}
+
+function updateHist(){
+  var h=game.history(),el=document.getElementById("hist");
+  if(!h.length){el.textContent="Aucun coup joue.";return;}
+  var html="";
+  for(var i=0;i<h.length;i+=2){
+    var n=Math.floor(i/2)+1;
+    html+="<span style='color:var(--dim)'>"+n+".</span> "+h[i]+(h[i+1]?" "+h[i+1]:"")+" ";
+  }
+  el.innerHTML=html;el.scrollTop=el.scrollHeight;
+}
+
+function renderList(){
+  var q=document.getElementById("search").value.toLowerCase();
+  var list=document.getElementById("olist");
+  var filtered=OPENINGS.filter(function(o){
+    return o.name.toLowerCase().indexOf(q)!==-1||o.eco.toLowerCase().indexOf(q)!==-1||o.moves.join(" ").toLowerCase().indexOf(q)!==-1;
+  });
+  document.getElementById("olabel").textContent=filtered.length+" ouverture"+(filtered.length!==1?"s":"");
+  list.innerHTML="";
+  filtered.forEach(function(o){
+    var idx=OPENINGS.indexOf(o);
+    var d=document.createElement("div");
+    d.className="oi"+(activeIdx===idx?" act":"");
+    d.innerHTML="<div class='oi-eco'>"+o.eco+"</div><div class='oi-name'>"+o.name+"</div><div class='oi-moves'>"+o.moves.join(" ")+"</div>";
+    d.addEventListener("click",function(){loadOpening(idx);});
+    list.appendChild(d);
+  });
+}
+
+function loadOpening(idx){
+  var op=OPENINGS[idx];
+  activeIdx=idx;guideOp=op;guideMode=true;guideStep=0;
+  game=new Chess();selSq=null;legalT=[];lmFrom=null;lmTo=null;movStack=[];
+  document.getElementById("oc").style.display="block";
+  document.getElementById("oct").textContent=op.eco+" - "+op.name;
+  document.getElementById("ocd").textContent=op.desc;
+  document.getElementById("sbar").style.display="flex";
+  updStep();renderBoard();renderList();
+  if(window.innerWidth<=680)closeSidebar();
+}
+
+function stepFwd(){
+  if(!guideMode||!guideOp||guideStep>=guideOp.moves.length)return;
+  var mv=game.move(guideOp.moves[guideStep]);
+  if(mv){lmFrom=mv.from;lmTo=mv.to;guideStep++;}
+  selSq=null;legalT=[];updStep();renderBoard();
+}
+
+function stepBack(){
+  if(!guideMode||guideStep===0)return;
+  game.undo();guideStep--;lmFrom=null;lmTo=null;
+  var h=game.history({verbose:true});
+  if(h.length){lmFrom=h[h.length-1].from;lmTo=h[h.length-1].to;}
+  selSq=null;legalT=[];updStep();renderBoard();
+}
+
+function updStep(){
+  if(guideOp)document.getElementById("sinfo").textContent=guideStep+"/"+guideOp.moves.length;
+  document.getElementById("bprev").disabled=(guideStep===0);
+  document.getElementById("bnext").disabled=(!guideOp||guideStep>=guideOp.moves.length);
+}
+
+function freePlay(){
+  guideMode=false;
+  document.getElementById("sbar").style.display="none";
+}
+
+function doReset(){
+  game=new Chess();selSq=null;legalT=[];lmFrom=null;lmTo=null;
+  guideMode=false;guideOp=null;guideStep=0;activeIdx=-1;movStack=[];
+  document.getElementById("oc").style.display="none";
+  document.getElementById("sbar").style.display="none";
+  renderBoard();renderList();
+}
+
+function doUndo(){
+  if(guideMode)return;
+  var r=game.undo();
+  if(r){
+    movStack.pop();lmFrom=null;lmTo=null;
+    if(movStack.length){var l=movStack[movStack.length-1];lmFrom=l.f;lmTo=l.t;}
+    selSq=null;legalT=[];renderBoard();
+  }
+}
+
+function doAI(){
+  if(guideMode||game.game_over())return;
+  var moves=game.moves();if(!moves.length)return;
+  var mv=game.move(moves[Math.floor(Math.random()*moves.length)]);
+  if(mv){lmFrom=mv.from;lmTo=mv.to;movStack.push({f:mv.from,t:mv.to});selSq=null;legalT=[];renderBoard();}
+}
+
+window.addEventListener("load",function(){
+  init();
+  /* Enregistrement du Service Worker pour le mode PWA hors-ligne */
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./service-worker.js").catch(function(err){
+      console.warn("Service worker non enregistre :", err);
+    });
+  }
+});
+</script>
+</body>
+</html>
