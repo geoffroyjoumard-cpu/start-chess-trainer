@@ -146,8 +146,7 @@ html,body{width:100%;height:100%;font-family:'EB Garamond',Georgia,serif;backgro
 .cb{display:grid;grid-template-columns:repeat(8,64px);grid-template-rows:repeat(8,64px);border:3px solid var(--board-border);box-shadow:0 0 0 1px var(--board-outline),0 10px 45px rgba(0,0,0,.9)}
 .fl-row{display:flex}
 .fl{width:64px;text-align:center;font-size:.65rem;color:var(--dim);padding-top:3px}
-.sq{width:64px;height:64px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;user-select:none;transition:background .08s}
-.sq.lt{background:var(--sq-lt)}
+.sq{width:64px;height:64px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;user-select:none;transition:background .08s}.sq.lt{background:var(--sq-lt)}
 .sq.dk{background:var(--sq-dk)}
 .sq.sel.lt{background:var(--sel-l)}
 .sq.sel.dk{background:var(--sel-d)}
@@ -156,17 +155,9 @@ html,body{width:100%;height:100%;font-family:'EB Garamond',Georgia,serif;backgro
 .sq.chk{background:radial-gradient(circle at 50%,#ff5555,#cc0000)!important}
 .ldot{width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.22);position:absolute;pointer-events:none;z-index:1}
 .lring{position:absolute;inset:3px;border:5px solid rgba(0,0,0,.22);pointer-events:none;z-index:1}
-.pc{font-size:44px;line-height:1;pointer-events:none;z-index:2;position:relative;display:flex;align-items:center;justify-content:center}
-.pc.w{
-  color:#fffff0;
-  -webkit-text-stroke:1.8px #6b3a10;
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,.7));
-}
-.pc.b{
-  color:#1a0a00;
-  -webkit-text-stroke:1px #c8a060;
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));
-}
+.pc{font-size:44px;line-height:1;pointer-events:none;z-index:2;position:relative;display:flex;align-items:center;justify-content:center;text-shadow:none !important;filter:none !important}
+.pc.w{color:#ffffff;-webkit-text-stroke:0.8px #000000;text-shadow:none !important;filter:none !important}
+.pc.b{color:#000000;-webkit-text-stroke:0.8px #ffffff;text-shadow:none !important;filter:none !important}
 /* Controls */
 .ctrl{display:flex;flex-direction:column;gap:11px;width:208px}
 .pill{display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--card);border:1px solid var(--bord2);border-radius:4px;font-size:.86rem}
