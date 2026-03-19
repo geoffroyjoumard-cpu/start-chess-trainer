@@ -33,7 +33,6 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:'EB Garamond'
 .hdr-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--gold); letter-spacing:.03em; }
 .hdr-sub { font-style:italic; font-size:.82rem; color:var(--muted); }
 .body { display:flex; flex:1; overflow:hidden; position:relative; }
-/* Sidebar */
 .sidebar { width:250px; min-width:250px; display:flex; flex-direction:column; background:var(--panel); border-right:1px solid var(--bord2); overflow:hidden; flex-shrink:0; transition:transform .27s ease; }
 .sw { padding:10px; border-bottom:1px solid var(--border); }
 .si { width:100%; padding:7px 10px; background:var(--card); border:1px solid var(--bord2); border-radius:3px; color:var(--text); font-family:'EB Garamond',serif; font-size:.9rem; outline:none; transition:border-color .15s; }
@@ -49,7 +48,6 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:'EB Garamond'
 .oi-eco { font-size:.67rem; color:var(--gdim); letter-spacing:.05em; text-transform:uppercase; }
 .oi-name { font-family:'Playfair Display',serif; font-size:.87rem; line-height:1.25; }
 .oi-moves { font-size:.71rem; color:var(--dim); font-style:italic; margin-top:1px; }
-/* Main */
 .main { flex:1; display:flex; align-items:center; justify-content:center; padding:16px; overflow:auto; gap:20px; }
 .board-outer { display:flex; align-items:flex-start; gap:4px; }
 .rk-col { display:flex; flex-direction:column; }
@@ -68,10 +66,9 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:'EB Garamond'
 .sq.chk { background:radial-gradient(circle at 50% 50%, #ff5555 0%, #cc0000 100%) !important; }
 .ldot { width:15px; height:15px; border-radius:50%; background:rgba(0,0,0,.22); position:absolute; pointer-events:none; z-index:1; }
 .lring { position:absolute; inset:2px; border:4px solid rgba(0,0,0,.22); pointer-events:none; z-index:1; }
-.pc { font-size:35px; line-height:1; pointer-events:none; z-index:2; position:relative; }
+.pc { font-size:35px; line-height:1; pointer-events:none; z-index:2; position:relative; transition:transform .08s; }
 .pc.w { color:#fff8e8; text-shadow:0 1px 0 #7a5020, 0 2px 5px rgba(0,0,0,.65); }
 .pc.b { color:#1a0e00; text-shadow:0 1px 0 #5a3a18, 0 2px 5px rgba(0,0,0,.55); }
-/* Controls */
 .ctrl { display:flex; flex-direction:column; gap:12px; width:210px; }
 .pill { display:flex; align-items:center; gap:9px; padding:8px 11px; background:var(--card); border:1px solid var(--bord2); border-radius:4px; font-size:.87rem; }
 .tdot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
@@ -91,27 +88,27 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:'EB Garamond'
 .btn.gold { background:#1c1505; border-color:var(--gdim); color:var(--gold); }
 .btn.gold:hover { background:#281e08; }
 .btn:disabled { opacity:.35; cursor:not-allowed; }
+.btn.active-toggle { background:var(--active); border-color:var(--gold); color:var(--gold); }
 .brow { display:flex; gap:5px; flex-wrap:wrap; }
 .hint { font-size:.73rem; color:var(--dim); line-height:1.5; }
-/* Mobile toggle button */
-.toggle-btn {
-  display:none; margin-left:auto;
-  align-items:center; gap:6px; padding:5px 13px;
-  background:var(--card); border:1px solid var(--bord2);
-  color:var(--gold); font-family:'EB Garamond',serif; font-size:.82rem;
-  cursor:pointer; border-radius:3px; transition:all .15s; flex-shrink:0;
-}
+/* AI difficulty selector */
+.diff-row { display:flex; align-items:center; gap:6px; }
+.diff-lbl { font-size:.72rem; color:var(--dim); }
+.diff-sel { background:var(--card); border:1px solid var(--bord2); color:var(--text); font-family:'EB Garamond',serif; font-size:.8rem; padding:3px 7px; border-radius:3px; cursor:pointer; outline:none; }
+.diff-sel:focus { border-color:var(--gdim); }
+/* Sound toggle */
+.sound-btn { padding:4px 9px; font-size:.78rem; }
+/* AI thinking indicator */
+.ai-thinking { display:none; font-size:.75rem; color:var(--gdim); font-style:italic; animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+/* Mobile toggle */
+.toggle-btn { display:none; margin-left:auto; align-items:center; gap:6px; padding:5px 13px; background:var(--card); border:1px solid var(--bord2); color:var(--gold); font-family:'EB Garamond',serif; font-size:.82rem; cursor:pointer; border-radius:3px; transition:all .15s; flex-shrink:0; }
 .toggle-btn:hover { background:var(--hover); border-color:var(--gdim); }
 .arrow { display:inline-block; transition:transform .25s ease; font-style:normal; }
-/* Mobile */
 @media (max-width:680px) {
   .hdr-sub { display:none; }
   .toggle-btn { display:flex; }
-  .sidebar {
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    min-width:unset; z-index:20;
-    transform:translateX(-100%); border-right:none;
-  }
+  .sidebar { position:absolute; top:0; left:0; width:100%; height:100%; min-width:unset; z-index:20; transform:translateX(-100%); border-right:none; }
   .sidebar.open { transform:translateX(0); }
   .main { flex-direction:column; padding:10px 6px; gap:10px; align-items:center; }
   .cb  { grid-template-columns:repeat(8,min(42px,11vw)); grid-template-rows:repeat(8,min(42px,11vw)); }
@@ -155,71 +152,94 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:'EB Garamond'
           <div class="tdot w" id="tdot"></div>
           <span id="stxt">Blancs a jouer</span>
         </div>
+
         <div id="oc" style="display:none" class="oc">
           <div class="oc-title" id="oct"></div>
           <div class="oc-desc" id="ocd"></div>
         </div>
+
         <div id="sbar" style="display:none" class="step-row">
           <button class="btn" id="bprev" onclick="stepBack()">&larr; Prec</button>
           <button class="btn" id="bnext" onclick="stepFwd()">Suiv &rarr;</button>
           <span class="step-info" id="sinfo"></span>
           <button class="btn" onclick="freePlay()">Libre</button>
         </div>
+
         <div>
           <div class="sec-lbl">Historique</div>
           <div class="hist" id="hist">Aucun coup joue.</div>
         </div>
+
+        <!-- AI difficulty -->
+        <div class="diff-row">
+          <span class="diff-lbl">IA :</span>
+          <select class="diff-sel" id="diffSel">
+            <option value="1">Debutant</option>
+            <option value="2" selected>Intermediaire</option>
+            <option value="3">Avance</option>
+            <option value="4">Expert</option>
+          </select>
+          <button class="btn sound-btn" id="soundBtn" onclick="toggleSound()" title="Sons on/off">&#128266;</button>
+        </div>
+
+        <div class="ai-thinking" id="aiThink">&#9203; IA reflechit...</div>
+
         <div class="brow">
           <button class="btn gold" onclick="doReset()">&#8635; Reset</button>
-          <button class="btn" onclick="doAI()">IA aleat.</button>
+          <button class="btn" id="aiBtn" onclick="doAI()">Jouer IA</button>
           <button class="btn" onclick="doUndo()">Annuler</button>
         </div>
+
         <div class="hint">Cliquez une piece puis la case de destination.</div>
       </div>
     </div>
   </div>
 </div>
+
 <script>
+/* ════════════════════════════════════
+   OPENINGS DATABASE
+════════════════════════════════════ */
 var OPENINGS=[
   {eco:"A00",name:"Ouverture Polonaise",moves:["b4"],desc:"Controle le centre par le flanc en avancant le pion b des le depart."},
-  {eco:"A00",name:"Attaque Grob",moves:["g4"],desc:"Avancement immediat du pion g. Agressif et inhabituel, cree des desequilibres."},
-  {eco:"A04",name:"Ouverture Reti",moves:["Nf3"],desc:"Ouverture hypermoderne : les Blancs controlent le centre avec leurs pieces."},
-  {eco:"A10",name:"Ouverture Anglaise",moves:["c4"],desc:"Conteste le centre avec le pion c. Jeu positionnel riche et varie."},
-  {eco:"A45",name:"Attaque Trompowsky",moves:["d4","Nf6","Bg5"],desc:"Les Blancs clouent le cavalier adverse, creant des positions inhabituelles."},
+  {eco:"A00",name:"Attaque Grob",moves:["g4"],desc:"Avancement immediat du pion g. Agressif et inhabituel."},
+  {eco:"A04",name:"Ouverture Reti",moves:["Nf3"],desc:"Ouverture hypermoderne : controle du centre avec les pieces."},
+  {eco:"A10",name:"Ouverture Anglaise",moves:["c4"],desc:"Conteste le centre avec le pion c. Jeu positionnel riche."},
+  {eco:"A45",name:"Attaque Trompowsky",moves:["d4","Nf6","Bg5"],desc:"Les Blancs clouent le cavalier adverse immediatement."},
   {eco:"B01",name:"Defense Scandinave",moves:["e4","d5"],desc:"Les Noirs challengent directement le centre des le premier coup."},
-  {eco:"B06",name:"Defense Moderne",moves:["e4","g6"],desc:"Les Noirs laissent les Blancs construire un grand centre puis l'attaquent."},
-  {eco:"B07",name:"Defense Pirc",moves:["e4","d6","d4","Nf6","Nc3","g6"],desc:"Posture defensive puis contre-attaque pour dynamiter le centre blanc."},
-  {eco:"B10",name:"Defense Caro-Kann",moves:["e4","c6"],desc:"Defense solide preparant d5. Structure de pions saine sans faiblesses."},
+  {eco:"B06",name:"Defense Moderne",moves:["e4","g6"],desc:"Les Noirs laissent les Blancs construire un centre et l'attaquent."},
+  {eco:"B07",name:"Defense Pirc",moves:["e4","d6","d4","Nf6","Nc3","g6"],desc:"Posture defensive puis contre-attaque sur le centre blanc."},
+  {eco:"B10",name:"Defense Caro-Kann",moves:["e4","c6"],desc:"Defense solide preparant d5. Structure de pions saine."},
   {eco:"B12",name:"Caro-Kann Avancee",moves:["e4","c6","d4","d5","e5"],desc:"Les Blancs s'emparent de l'espace. Lutte positionnelle intense."},
-  {eco:"B20",name:"Defense Sicilienne",moves:["e4","c5"],desc:"La reponse la plus populaire a 1.e4. Jeu asymetrique et desequilibre."},
-  {eco:"B21",name:"Sicilienne Grand Prix",moves:["e4","c5","Nc3","Nc6","f4"],desc:"Attaque aggressive sur l'aile roi avant le contre-jeu des Noirs."},
-  {eco:"B23",name:"Sicilienne Fermee",moves:["e4","c5","Nc3","Nc6","g3"],desc:"Les Blancs evitent les complications ouvertes avec une fianchette."},
-  {eco:"B70",name:"Sicilienne Dragon",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6"],desc:"Une des lignes les plus tranchantes. Fou en fianchette devastateur."},
-  {eco:"B80",name:"Sicilienne Scheveningen",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","e6"],desc:"Systeme flexible avec petit centre solide. L'arme de Kasparov."},
-  {eco:"B90",name:"Sicilienne Najdorf",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6"],desc:"L'ouverture la plus riche en theorie. L'arme de Fischer et Kasparov."},
-  {eco:"C00",name:"Defense Francaise",moves:["e4","e6"],desc:"Defense solide avec structure saine. Fou passif en c8 comme inconvenient."},
-  {eco:"C02",name:"Francaise Avancee",moves:["e4","e6","d4","d5","e5"],desc:"Les Blancs gagnent de l'espace. Attaques des deux cotes du plateau."},
+  {eco:"B20",name:"Defense Sicilienne",moves:["e4","c5"],desc:"La reponse la plus populaire a 1.e4. Jeu asymetrique riche."},
+  {eco:"B21",name:"Sicilienne Grand Prix",moves:["e4","c5","Nc3","Nc6","f4"],desc:"Attaque aggressive sur l'aile roi."},
+  {eco:"B23",name:"Sicilienne Fermee",moves:["e4","c5","Nc3","Nc6","g3"],desc:"Construction tranquille avec fianchette, evite les complications."},
+  {eco:"B70",name:"Sicilienne Dragon",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","g6"],desc:"Une des lignes les plus tranchantes aux echecs."},
+  {eco:"B80",name:"Sicilienne Scheveningen",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","e6"],desc:"Systeme flexible avec petit centre solide. Arme de Kasparov."},
+  {eco:"B90",name:"Sicilienne Najdorf",moves:["e4","c5","Nf3","d6","d4","cxd4","Nxd4","Nf6","Nc3","a6"],desc:"L'ouverture la plus riche en theorie. Arme de Fischer et Kasparov."},
+  {eco:"C00",name:"Defense Francaise",moves:["e4","e6"],desc:"Defense solide avec structure saine. Fou passif en c8."},
+  {eco:"C02",name:"Francaise Avancee",moves:["e4","e6","d4","d5","e5"],desc:"Les Blancs gagnent de l'espace. Attaques des deux cotes."},
   {eco:"C21",name:"Gambit Danois",moves:["e4","e5","d4","exd4","c3"],desc:"Sacrifice de deux pions pour un developpement foudroyant."},
-  {eco:"C30",name:"Gambit du Roi",moves:["e4","e5","f4"],desc:"Gambit romantique pour developpement rapide. Aime de Morphy et Anderssen."},
-  {eco:"C40",name:"Defense Petrov",moves:["e4","e5","Nf3","Nf6"],desc:"Attaque symetrique. Tres solide mais considere passif au haut niveau."},
-  {eco:"C41",name:"Defense Philidor",moves:["e4","e5","Nf3","d6"],desc:"Solide mais passif. Accorde aux Blancs un fort controle central."},
+  {eco:"C30",name:"Gambit du Roi",moves:["e4","e5","f4"],desc:"Gambit romantique du XIXe siecle. Aime de Morphy."},
+  {eco:"C40",name:"Defense Petrov",moves:["e4","e5","Nf3","Nf6"],desc:"Attaque symetrique. Tres solide mais passif au haut niveau."},
+  {eco:"C41",name:"Defense Philidor",moves:["e4","e5","Nf3","d6"],desc:"Solide mais passif. Accorde aux Blancs un fort centre."},
   {eco:"C45",name:"Partie Ecossaise",moves:["e4","e5","Nf3","Nc6","d4"],desc:"Ouverture du centre immediate. Popularisee par Kasparov."},
-  {eco:"C50",name:"Partie Italienne",moves:["e4","e5","Nf3","Nc6","Bc4"],desc:"Vise le point f7. Parmi les plus anciennes, jeu tactique riche."},
-  {eco:"C51",name:"Gambit Evans",moves:["e4","e5","Nf3","Nc6","Bc4","Bc5","b4"],desc:"Sacrifice du pion b pour developpement rapide. Chef-d'oeuvre romantique."},
-  {eco:"C57",name:"Deux Cavaliers Foie Frit",moves:["e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","d5","exd5","Nxd5","Nxf7"],desc:"Sacrifice spectaculaire sur f7. Deux pions pour la piece avec forte attaque."},
-  {eco:"C60",name:"Ruy Lopez",moves:["e4","e5","Nf3","Nc6","Bb5"],desc:"L'ouverture la plus classique. Pression strategique durable sur le cavalier."},
-  {eco:"C65",name:"Ruy Lopez Berlin",moves:["e4","e5","Nf3","Nc6","Bb5","Nf6"],desc:"Le Mur de Berlin. Defense ultra-solide. Rendue celebre par Kramnik en 2000."},
-  {eco:"D02",name:"Systeme de Londres",moves:["d4","d5","Nf3","Nf6","Bf4"],desc:"Ouverture solide et systematique. Tres populaire en club, peu de theorie."},
-  {eco:"D06",name:"Gambit de la Dame",moves:["d4","d5","c4"],desc:"Offre le pion c pour controler le centre. Pierre angulaire des echecs positionnels."},
-  {eco:"D10",name:"Defense Slave",moves:["d4","d5","c4","c6"],desc:"Defense solide au GDR. Soutient d5 sans bloquer le fou en c8."},
+  {eco:"C50",name:"Partie Italienne",moves:["e4","e5","Nf3","Nc6","Bc4"],desc:"Vise f7. Parmi les plus anciennes, jeu tactique riche."},
+  {eco:"C51",name:"Gambit Evans",moves:["e4","e5","Nf3","Nc6","Bc4","Bc5","b4"],desc:"Sacrifice du pion b pour developpement rapide."},
+  {eco:"C57",name:"Deux Cavaliers Foie Frit",moves:["e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","d5","exd5","Nxd5","Nxf7"],desc:"Sacrifice spectaculaire sur f7. Deux pions pour la piece."},
+  {eco:"C60",name:"Ruy Lopez",moves:["e4","e5","Nf3","Nc6","Bb5"],desc:"L'ouverture la plus classique. Pression strategique durable."},
+  {eco:"C65",name:"Ruy Lopez Berlin",moves:["e4","e5","Nf3","Nc6","Bb5","Nf6"],desc:"Le Mur de Berlin. Defense ultra-solide rendue celebre en 2000."},
+  {eco:"D02",name:"Systeme de Londres",moves:["d4","d5","Nf3","Nf6","Bf4"],desc:"Ouverture solide et systematique. Tres populaire en club."},
+  {eco:"D06",name:"Gambit de la Dame",moves:["d4","d5","c4"],desc:"Offre le pion c pour controler le centre. Grand classique."},
+  {eco:"D10",name:"Defense Slave",moves:["d4","d5","c4","c6"],desc:"Defense solide. Soutient d5 sans bloquer le fou en c8."},
   {eco:"D20",name:"Gambit de la Dame Accepte",moves:["d4","d5","c4","dxc4"],desc:"Les Noirs acceptent et doivent etre precis pour equaliser."},
-  {eco:"D30",name:"Gambit de la Dame Refuse",moves:["d4","d5","c4","e6"],desc:"La reponse classique. Position solide, populaire a tous les niveaux."},
-  {eco:"D43",name:"Defense Semi-Slave",moves:["d4","d5","c4","c6","Nc3","Nf6","Nf3","e6"],desc:"Combinaison riche de la Slave et du GDR. Theorie tres intense."},
+  {eco:"D30",name:"Gambit de la Dame Refuse",moves:["d4","d5","c4","e6"],desc:"La reponse classique. Position solide, populaire a tous niveaux."},
+  {eco:"D43",name:"Defense Semi-Slave",moves:["d4","d5","c4","c6","Nc3","Nf6","Nf3","e6"],desc:"Combinaison riche de la Slave et du GDR. Theorie intense."},
   {eco:"D70",name:"Defense Grunfeld",moves:["d4","Nf6","c4","g6","Nc3","d5"],desc:"Laisse un centre massif aux Blancs puis l'attaque avec les pieces."},
-  {eco:"E00",name:"Ouverture Catalane",moves:["d4","Nf6","c4","e6","g3"],desc:"Pression du GDR combinee a une fianchette royale. Tres populaire au top."},
-  {eco:"E10",name:"Indienne de la Dame",moves:["d4","Nf6","c4","e6","Nf3","b6"],desc:"Fianchette du fou pour controler la grande diagonale. Solide et hypermoderne."},
-  {eco:"E20",name:"Nimzo-Indienne",moves:["d4","Nf6","c4","e6","Nc3","Bb4"],desc:"Les Noirs clouent le cavalier et contestent le centre. Tres respectee contre d4."},
-  {eco:"E60",name:"Indienne du Roi",moves:["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6"],desc:"Laisse un grand centre aux Blancs et l'attaque dynamiquement. Arme de Fischer."},
+  {eco:"E00",name:"Ouverture Catalane",moves:["d4","Nf6","c4","e6","g3"],desc:"Pression du GDR combinee a une fianchette royale."},
+  {eco:"E10",name:"Indienne de la Dame",moves:["d4","Nf6","c4","e6","Nf3","b6"],desc:"Fianchette pour controler la grande diagonale."},
+  {eco:"E20",name:"Nimzo-Indienne",moves:["d4","Nf6","c4","e6","Nc3","Bb4"],desc:"Les Noirs clouent le cavalier. Tres respectee contre d4."},
+  {eco:"E60",name:"Indienne du Roi",moves:["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6"],desc:"Laisse un grand centre aux Blancs et l'attaque dynamiquement."},
   {eco:"E80",name:"Indienne du Roi Samisch",moves:["d4","Nf6","c4","g6","Nc3","Bg7","e4","d6","f3"],desc:"Centre massif des Blancs et attaque directe sur le roi noir."}
 ];
 
@@ -230,8 +250,238 @@ var PC={
 
 var game,selSq=null,legalT=[],lmFrom=null,lmTo=null;
 var guideMode=false,guideStep=0,guideOp=null,activeIdx=-1,movStack=[];
-var sidebarOpen=false;
+var sidebarOpen=false,soundOn=true,aiRunning=false;
+var audioCtx=null;
 
+/* ════════════════════════════════════
+   SOUND ENGINE (Web Audio API)
+════════════════════════════════════ */
+function getAudioCtx(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq,type,duration,vol,attack,decay){
+  try{
+    var ctx=getAudioCtx();
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    var t=ctx.currentTime;
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type=type||"sine";
+    osc.frequency.setValueAtTime(freq,t);
+    gain.gain.setValueAtTime(0,t);
+    gain.gain.linearRampToValueAtTime(vol||0.3,t+(attack||0.005));
+    gain.gain.exponentialRampToValueAtTime(0.001,t+(duration||0.3));
+    osc.start(t);osc.stop(t+(duration||0.3)+(decay||0.05));
+  }catch(e){}
+}
+
+function playNoise(duration,vol){
+  try{
+    var ctx=getAudioCtx();
+    var buf=ctx.createBuffer(1,ctx.sampleRate*duration,ctx.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
+    var src=ctx.createBufferSource();
+    src.buffer=buf;
+    var gain=ctx.createGain();
+    var filter=ctx.createBiquadFilter();
+    filter.type="bandpass";filter.frequency.value=400;filter.Q.value=0.5;
+    src.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+    var t=ctx.currentTime;
+    gain.gain.setValueAtTime(vol||0.15,t);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+duration);
+    src.start(t);src.stop(t+duration+0.05);
+  }catch(e){}
+}
+
+function soundMove(){
+  if(!soundOn)return;
+  /* Wooden thud: brief noise burst + low tone */
+  playNoise(0.07,0.18);
+  playTone(180,"sine",0.08,0.12);
+}
+
+function soundCapture(){
+  if(!soundOn)return;
+  /* Two-impact sound */
+  playNoise(0.05,0.25);
+  playTone(140,"sawtooth",0.06,0.18);
+  setTimeout(function(){playNoise(0.04,0.15);},60);
+}
+
+function soundCheck(){
+  if(!soundOn)return;
+  playTone(660,"square",0.12,0.2);
+  setTimeout(function(){playTone(880,"square",0.15,0.15);},100);
+}
+
+function soundMate(){
+  if(!soundOn)return;
+  var notes=[440,370,330,220];
+  notes.forEach(function(f,i){setTimeout(function(){playTone(f,"sawtooth",0.25,0.2);},i*120);});
+}
+
+function soundSelect(){
+  if(!soundOn)return;
+  playTone(520,"sine",0.05,0.08);
+}
+
+function toggleSound(){
+  soundOn=!soundOn;
+  document.getElementById("soundBtn").textContent=soundOn?"&#128266;":"&#128263;";
+  document.getElementById("soundBtn").title=soundOn?"Sons ON":"Sons OFF";
+}
+
+/* ════════════════════════════════════
+   MINIMAX AI WITH ALPHA-BETA PRUNING
+════════════════════════════════════ */
+/* Piece values */
+var PIECE_VAL={p:100,n:320,b:330,r:500,q:900,k:20000};
+
+/* Piece-square tables (from white's perspective, rank 1-8) */
+var PST={
+  p:[[ 0, 0, 0, 0, 0, 0, 0, 0],
+     [50,50,50,50,50,50,50,50],
+     [10,10,20,30,30,20,10,10],
+     [ 5, 5,10,25,25,10, 5, 5],
+     [ 0, 0, 0,20,20, 0, 0, 0],
+     [ 5,-5,-10, 0, 0,-10,-5, 5],
+     [ 5,10,10,-20,-20,10,10, 5],
+     [ 0, 0, 0, 0, 0, 0, 0, 0]],
+  n:[[-50,-40,-30,-30,-30,-30,-40,-50],
+     [-40,-20,  0,  0,  0,  0,-20,-40],
+     [-30,  0, 10, 15, 15, 10,  0,-30],
+     [-30,  5, 15, 20, 20, 15,  5,-30],
+     [-30,  0, 15, 20, 20, 15,  0,-30],
+     [-30,  5, 10, 15, 15, 10,  5,-30],
+     [-40,-20,  0,  5,  5,  0,-20,-40],
+     [-50,-40,-30,-30,-30,-30,-40,-50]],
+  b:[[-20,-10,-10,-10,-10,-10,-10,-20],
+     [-10,  0,  0,  0,  0,  0,  0,-10],
+     [-10,  0,  5, 10, 10,  5,  0,-10],
+     [-10,  5,  5, 10, 10,  5,  5,-10],
+     [-10,  0, 10, 10, 10, 10,  0,-10],
+     [-10, 10, 10, 10, 10, 10, 10,-10],
+     [-10,  5,  0,  0,  0,  0,  5,-10],
+     [-20,-10,-10,-10,-10,-10,-10,-20]],
+  r:[[ 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 5,10,10,10,10,10,10, 5],
+     [-5, 0, 0, 0, 0, 0, 0,-5],
+     [-5, 0, 0, 0, 0, 0, 0,-5],
+     [-5, 0, 0, 0, 0, 0, 0,-5],
+     [-5, 0, 0, 0, 0, 0, 0,-5],
+     [-5, 0, 0, 0, 0, 0, 0,-5],
+     [ 0, 0, 0, 5, 5, 0, 0, 0]],
+  q:[[-20,-10,-10, -5, -5,-10,-10,-20],
+     [-10,  0,  0,  0,  0,  0,  0,-10],
+     [-10,  0,  5,  5,  5,  5,  0,-10],
+     [ -5,  0,  5,  5,  5,  5,  0, -5],
+     [  0,  0,  5,  5,  5,  5,  0, -5],
+     [-10,  5,  5,  5,  5,  5,  0,-10],
+     [-10,  0,  5,  0,  0,  0,  0,-10],
+     [-20,-10,-10, -5, -5,-10,-10,-20]],
+  k:[[-30,-40,-40,-50,-50,-40,-40,-30],
+     [-30,-40,-40,-50,-50,-40,-40,-30],
+     [-30,-40,-40,-50,-50,-40,-40,-30],
+     [-30,-40,-40,-50,-50,-40,-40,-30],
+     [-20,-30,-30,-40,-40,-30,-30,-20],
+     [-10,-20,-20,-20,-20,-20,-20,-10],
+     [ 20, 20,  0,  0,  0,  0, 20, 20],
+     [ 20, 30, 10,  0,  0, 10, 30, 20]]
+};
+
+function getPSTValue(piece,sq){
+  var files="abcdefgh";
+  var file=files.indexOf(sq[0]);
+  var rank=parseInt(sq[1])-1; /* 0-based, rank 1 = index 0 */
+  var row,col;
+  if(piece.color==="w"){
+    row=7-rank; col=file;
+  }else{
+    row=rank; col=file;
+  }
+  var table=PST[piece.type];
+  if(!table)return 0;
+  return table[row][col];
+}
+
+function evaluateBoard(g){
+  if(g.in_checkmate()) return g.turn()==="w"?-99999:99999;
+  if(g.in_draw()||g.in_stalemate())return 0;
+  var score=0;
+  var brd=g.board();
+  var files="abcdefgh";
+  for(var r=0;r<8;r++){
+    for(var c=0;c<8;c++){
+      var piece=brd[r][c];
+      if(!piece)continue;
+      var sq=files[c]+(8-r);
+      var val=PIECE_VAL[piece.type]+getPSTValue(piece,sq);
+      score+=(piece.color==="w"?val:-val);
+    }
+  }
+  return score;
+}
+
+function orderMoves(moves,g){
+  /* MVV-LVA : captures first, then checks */
+  return moves.slice().sort(function(a,b){
+    var aCapture=a.indexOf("x")!==-1?1:0;
+    var bCapture=b.indexOf("x")!==-1?1:0;
+    var aPromo=a.indexOf("=")!==-1?1:0;
+    var bPromo=b.indexOf("=")!==-1?1:0;
+    return (bCapture+bPromo)-(aCapture+aPromo);
+  });
+}
+
+function minimax(g,depth,alpha,beta,maximizing){
+  if(depth===0||g.game_over()) return evaluateBoard(g);
+  var moves=orderMoves(g.moves(),g);
+  if(maximizing){
+    var best=-Infinity;
+    for(var i=0;i<moves.length;i++){
+      g.move(moves[i]);
+      var val=minimax(g,depth-1,alpha,beta,false);
+      g.undo();
+      if(val>best)best=val;
+      if(val>alpha)alpha=val;
+      if(beta<=alpha)break;
+    }
+    return best;
+  }else{
+    var best=Infinity;
+    for(var i=0;i<moves.length;i++){
+      g.move(moves[i]);
+      var val=minimax(g,depth-1,alpha,beta,true);
+      g.undo();
+      if(val<best)best=val;
+      if(val<beta)beta=val;
+      if(beta<=alpha)break;
+    }
+    return best;
+  }
+}
+
+function getBestMove(g,depth){
+  var moves=orderMoves(g.moves(),g);
+  var bestMove=null,bestVal=(g.turn()==="w"?-Infinity:Infinity);
+  var isMax=(g.turn()==="w");
+  for(var i=0;i<moves.length;i++){
+    g.move(moves[i]);
+    var val=minimax(g,depth-1,-Infinity,Infinity,!isMax);
+    g.undo();
+    if(isMax&&val>bestVal){bestVal=val;bestMove=moves[i];}
+    if(!isMax&&val<bestVal){bestVal=val;bestMove=moves[i];}
+  }
+  /* Tiny randomness at low depths so it doesn't feel robotic */
+  return bestMove||moves[Math.floor(Math.random()*moves.length)];
+}
+
+/* ════════════════════════════════════
+   SIDEBAR TOGGLE
+════════════════════════════════════ */
 function toggleSidebar(){
   sidebarOpen=!sidebarOpen;
   document.getElementById("sidebar").classList.toggle("open",sidebarOpen);
@@ -243,15 +493,16 @@ function closeSidebar(){
   document.getElementById("arrow").style.transform="rotate(0deg)";
 }
 
+/* ════════════════════════════════════
+   INIT
+════════════════════════════════════ */
 function init(){
   if(typeof Chess==="undefined"){
     document.querySelector(".main").innerHTML="<div style='color:var(--gold);text-align:center;padding:40px;line-height:2;font-size:1rem'><div style='font-size:2rem'>&#9888;</div><br>Moteur chess.js non charge.<br><small style='color:var(--muted)'>Verifiez votre connexion et rechargez.</small></div>";
     return;
   }
   game=new Chess();
-  buildCoords();
-  renderBoard();
-  renderList();
+  buildCoords();renderBoard();renderList();
   document.getElementById("search").addEventListener("input",renderList);
 }
 
@@ -262,6 +513,9 @@ function buildCoords(){
   for(var i=0;i<8;i++){var d2=document.createElement("div");d2.className="fl";d2.textContent=f[i];fl.appendChild(d2);}
 }
 
+/* ════════════════════════════════════
+   BOARD RENDER
+════════════════════════════════════ */
 function renderBoard(){
   var el=document.getElementById("cb");
   el.innerHTML="";
@@ -293,34 +547,51 @@ function renderBoard(){
   updateStatus();updateHist();
 }
 
+/* ════════════════════════════════════
+   CLICK HANDLER
+════════════════════════════════════ */
 function handleClick(sq){
-  if(guideMode)return;
+  if(guideMode||aiRunning)return;
+  /* Unlock audio on first user gesture */
+  if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume();
   var piece=game.get(sq);
   if(selSq){
     if(legalT.indexOf(sq)!==-1){
+      var wasCapture=!!game.get(sq);
       var mv=game.move({from:selSq,to:sq,promotion:"q"});
-      if(mv){lmFrom=mv.from;lmTo=mv.to;movStack.push({f:mv.from,t:mv.to});}
+      if(mv){
+        lmFrom=mv.from;lmTo=mv.to;movStack.push({f:mv.from,t:mv.to});
+        if(game.in_checkmate())soundMate();
+        else if(game.in_check())soundCheck();
+        else if(wasCapture||mv.flags.indexOf("e")!==-1)soundCapture();
+        else soundMove();
+      }
       selSq=null;legalT=[];renderBoard();return;
     }
     if(piece&&piece.color===game.turn()){
+      soundSelect();
       selSq=sq;legalT=game.moves({square:sq,verbose:true}).map(function(m){return m.to;});
     }else{selSq=null;legalT=[];}
   }else{
     if(piece&&piece.color===game.turn()){
+      soundSelect();
       selSq=sq;legalT=game.moves({square:sq,verbose:true}).map(function(m){return m.to;});
     }
   }
   renderBoard();
 }
 
+/* ════════════════════════════════════
+   STATUS & HISTORY
+════════════════════════════════════ */
 function updateStatus(){
   var dot=document.getElementById("tdot"),txt=document.getElementById("stxt"),t=game.turn();
   dot.className="tdot "+t;
-  if(game.in_checkmate())txt.textContent=(t==="w"?"Les Noirs":"Les Blancs")+" gagnent !";
+  if(game.in_checkmate())     txt.textContent=(t==="w"?"Les Noirs":"Les Blancs")+" gagnent !";
   else if(game.in_stalemate())txt.textContent="Pat - Nulle !";
-  else if(game.in_draw())txt.textContent="Nulle !";
-  else if(game.in_check())txt.textContent=(t==="w"?"Blancs":"Noirs")+" en echec !";
-  else txt.textContent=(t==="w"?"Blancs":"Noirs")+" a jouer";
+  else if(game.in_draw())     txt.textContent="Nulle !";
+  else if(game.in_check())    txt.textContent=(t==="w"?"Blancs":"Noirs")+" en echec !";
+  else                         txt.textContent=(t==="w"?"Blancs":"Noirs")+" a jouer";
 }
 
 function updateHist(){
@@ -334,6 +605,9 @@ function updateHist(){
   el.innerHTML=html;el.scrollTop=el.scrollHeight;
 }
 
+/* ════════════════════════════════════
+   OPENING LIST
+════════════════════════════════════ */
 function renderList(){
   var q=document.getElementById("search").value.toLowerCase();
   var list=document.getElementById("olist");
@@ -364,16 +638,28 @@ function loadOpening(idx){
   if(window.innerWidth<=680)closeSidebar();
 }
 
+/* ════════════════════════════════════
+   GUIDE NAVIGATION
+════════════════════════════════════ */
 function stepFwd(){
   if(!guideMode||!guideOp||guideStep>=guideOp.moves.length)return;
+  var wasCapture=false;
   var mv=game.move(guideOp.moves[guideStep]);
-  if(mv){lmFrom=mv.from;lmTo=mv.to;guideStep++;}
+  if(mv){
+    wasCapture=(mv.flags.indexOf("c")!==-1||mv.flags.indexOf("e")!==-1);
+    lmFrom=mv.from;lmTo=mv.to;guideStep++;
+    if(game.in_checkmate())soundMate();
+    else if(game.in_check())soundCheck();
+    else if(wasCapture)soundCapture();
+    else soundMove();
+  }
   selSq=null;legalT=[];updStep();renderBoard();
 }
 
 function stepBack(){
   if(!guideMode||guideStep===0)return;
   game.undo();guideStep--;lmFrom=null;lmTo=null;
+  soundMove();
   var h=game.history({verbose:true});
   if(h.length){lmFrom=h[h.length-1].from;lmTo=h[h.length-1].to;}
   selSq=null;legalT=[];updStep();renderBoard();
@@ -390,37 +676,67 @@ function freePlay(){
   document.getElementById("sbar").style.display="none";
 }
 
+/* ════════════════════════════════════
+   CONTROLS
+════════════════════════════════════ */
 function doReset(){
   game=new Chess();selSq=null;legalT=[];lmFrom=null;lmTo=null;
-  guideMode=false;guideOp=null;guideStep=0;activeIdx=-1;movStack=[];
+  guideMode=false;guideOp=null;guideStep=0;activeIdx=-1;movStack=[];aiRunning=false;
   document.getElementById("oc").style.display="none";
   document.getElementById("sbar").style.display="none";
+  document.getElementById("aiThink").style.display="none";
+  document.getElementById("aiBtn").disabled=false;
   renderBoard();renderList();
 }
 
 function doUndo(){
-  if(guideMode)return;
+  if(guideMode||aiRunning)return;
   var r=game.undo();
   if(r){
-    movStack.pop();lmFrom=null;lmTo=null;
+    /* Undo twice to undo player + AI move */
+    game.undo();movStack.pop();movStack.pop();
+    lmFrom=null;lmTo=null;
     if(movStack.length){var l=movStack[movStack.length-1];lmFrom=l.f;lmTo=l.t;}
-    selSq=null;legalT=[];renderBoard();
+    selSq=null;legalT=[];soundMove();renderBoard();
   }
 }
 
 function doAI(){
-  if(guideMode||game.game_over())return;
-  var moves=game.moves();if(!moves.length)return;
-  var mv=game.move(moves[Math.floor(Math.random()*moves.length)]);
-  if(mv){lmFrom=mv.from;lmTo=mv.to;movStack.push({f:mv.from,t:mv.to});selSq=null;legalT=[];renderBoard();}
+  if(guideMode||aiRunning||game.game_over())return;
+  var depth=parseInt(document.getElementById("diffSel").value)||2;
+  aiRunning=true;
+  document.getElementById("aiThink").style.display="block";
+  document.getElementById("aiBtn").disabled=true;
+  /* Run in a timeout so the UI updates before blocking computation */
+  setTimeout(function(){
+    var best=getBestMove(game,depth);
+    if(best){
+      var wasCapture=!!game.get(best.substring(2,4));
+      var mv=game.move(best);
+      if(mv){
+        lmFrom=mv.from;lmTo=mv.to;movStack.push({f:mv.from,t:mv.to});
+        if(game.in_checkmate())soundMate();
+        else if(game.in_check())soundCheck();
+        else if(wasCapture||mv.flags.indexOf("e")!==-1)soundCapture();
+        else soundMove();
+      }
+    }
+    selSq=null;legalT=[];
+    aiRunning=false;
+    document.getElementById("aiThink").style.display="none";
+    document.getElementById("aiBtn").disabled=false;
+    renderBoard();
+  },20);
 }
 
+/* ════════════════════════════════════
+   PWA SERVICE WORKER
+════════════════════════════════════ */
 window.addEventListener("load",function(){
   init();
-  /* Enregistrement du Service Worker pour le mode PWA hors-ligne */
   if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("./service-worker.js").catch(function(err){
-      console.warn("Service worker non enregistre :", err);
+    navigator.serviceWorker.register("./service-worker.js").catch(function(e){
+      console.warn("SW:",e);
     });
   }
 });
