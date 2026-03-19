@@ -141,12 +141,12 @@ html,body{width:100%;height:100%;font-family:'EB Garamond',Georgia,serif;backgro
 .main{flex:1;display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto;gap:18px}
 .board-outer{display:flex;align-items:flex-start;gap:4px}
 .rk-col{display:flex;flex-direction:column}
-.rk{height:52px;width:14px;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--dim)}
+.rk{height:64px;width:16px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--dim)}
 .board-inner{display:flex;flex-direction:column}
-.cb{display:grid;grid-template-columns:repeat(8,52px);grid-template-rows:repeat(8,52px);border:2px solid var(--board-border);box-shadow:0 0 0 1px var(--board-outline),0 10px 45px rgba(0,0,0,.9)}
+.cb{display:grid;grid-template-columns:repeat(8,64px);grid-template-rows:repeat(8,64px);border:3px solid var(--board-border);box-shadow:0 0 0 1px var(--board-outline),0 10px 45px rgba(0,0,0,.9)}
 .fl-row{display:flex}
-.fl{width:52px;text-align:center;font-size:.62rem;color:var(--dim);padding-top:3px}
-.sq{width:52px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;user-select:none;transition:background .08s}
+.fl{width:64px;text-align:center;font-size:.65rem;color:var(--dim);padding-top:3px}
+.sq{width:64px;height:64px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;user-select:none;transition:background .08s}
 .sq.lt{background:var(--sq-lt)}
 .sq.dk{background:var(--sq-dk)}
 .sq.sel.lt{background:var(--sel-l)}
@@ -154,11 +154,19 @@ html,body{width:100%;height:100%;font-family:'EB Garamond',Georgia,serif;backgro
 .sq.lmv.lt{background:var(--lm-l)}
 .sq.lmv.dk{background:var(--lm-d)}
 .sq.chk{background:radial-gradient(circle at 50%,#ff5555,#cc0000)!important}
-.ldot{width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,.22);position:absolute;pointer-events:none;z-index:1}
-.lring{position:absolute;inset:2px;border:4px solid rgba(0,0,0,.22);pointer-events:none;z-index:1}
-.pc{font-size:35px;line-height:1;pointer-events:none;z-index:2;position:relative}
-.pc.w{color:#fff8e8;text-shadow:0 1px 0 #7a5020,0 2px 5px rgba(0,0,0,.65)}
-.pc.b{color:#1a0e00;text-shadow:0 1px 0 #5a3a18,0 2px 5px rgba(0,0,0,.55)}
+.ldot{width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.22);position:absolute;pointer-events:none;z-index:1}
+.lring{position:absolute;inset:3px;border:5px solid rgba(0,0,0,.22);pointer-events:none;z-index:1}
+.pc{font-size:44px;line-height:1;pointer-events:none;z-index:2;position:relative;display:flex;align-items:center;justify-content:center}
+.pc.w{
+  color:#fffff0;
+  -webkit-text-stroke:1.8px #6b3a10;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.7));
+}
+.pc.b{
+  color:#1a0a00;
+  -webkit-text-stroke:1px #c8a060;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));
+}
 /* Controls */
 .ctrl{display:flex;flex-direction:column;gap:11px;width:208px}
 .pill{display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--card);border:1px solid var(--bord2);border-radius:4px;font-size:.86rem}
@@ -211,12 +219,12 @@ html,body{width:100%;height:100%;font-family:'EB Garamond',Georgia,serif;backgro
   .sidebar{position:absolute;top:0;left:0;width:100%;height:100%;min-width:unset;z-index:20;transform:translateX(-100%);border-right:none}
   .sidebar.open{transform:translateX(0)}
   .main{flex-direction:column;padding:8px 5px;gap:8px;align-items:center}
-  .cb{grid-template-columns:repeat(8,min(41px,10.8vw));grid-template-rows:repeat(8,min(41px,10.8vw))}
-  .sq{width:min(41px,10.8vw);height:min(41px,10.8vw)}
-  .rk{height:min(41px,10.8vw)}
-  .fl{width:min(41px,10.8vw)}
-  .pc{font-size:min(27px,7.2vw)}
-  .ldot{width:11px;height:11px}
+  .cb{grid-template-columns:repeat(8,min(44px,11.5vw));grid-template-rows:repeat(8,min(44px,11.5vw))}
+  .sq{width:min(44px,11.5vw);height:min(44px,11.5vw)}
+  .rk{height:min(44px,11.5vw)}
+  .fl{width:min(44px,11.5vw)}
+  .pc{font-size:min(30px,7.8vw)}
+  .ldot{width:12px;height:12px}
   .ctrl{width:100%;max-width:440px}
 }
 </style>
@@ -838,7 +846,10 @@ function getBest(g,depth){var mvs=orderM(g.moves()),best=null,bestV=(g.turn()===
    OPENINGS
 ═══════════════════════════════════════════ */
 var OPENINGS=[{eco:'A00',name:'Ouverture Polonaise',moves:['b4'],desc:'Controle le centre par le flanc.'},{eco:'A00',name:'Attaque Grob',moves:['g4'],desc:'Avancement du pion g. Agressif.'},{eco:'A04',name:'Ouverture Reti',moves:['Nf3'],desc:'Controle hypermoderne du centre.'},{eco:'A10',name:'Ouverture Anglaise',moves:['c4'],desc:'Jeu positionnel de flanc.'},{eco:'A45',name:'Attaque Trompowsky',moves:['d4','Nf6','Bg5'],desc:'Clouage immediat du cavalier.'},{eco:'B01',name:'Defense Scandinave',moves:['e4','d5'],desc:'Challenge direct du centre.'},{eco:'B06',name:'Defense Moderne',moves:['e4','g6'],desc:'Attaque du centre blanc.'},{eco:'B07',name:'Defense Pirc',moves:['e4','d6','d4','Nf6','Nc3','g6'],desc:'Posture defensive puis contre-attaque.'},{eco:'B10',name:'Defense Caro-Kann',moves:['e4','c6'],desc:'Defense solide preparant d5.'},{eco:'B12',name:'Caro-Kann Avancee',moves:['e4','c6','d4','d5','e5'],desc:'Les Blancs s\'emparent de l\'espace.'},{eco:'B20',name:'Defense Sicilienne',moves:['e4','c5'],desc:'La reponse la plus populaire a 1.e4.'},{eco:'B21',name:'Sicilienne Grand Prix',moves:['e4','c5','Nc3','Nc6','f4'],desc:'Attaque agressive sur l\'aile roi.'},{eco:'B23',name:'Sicilienne Fermee',moves:['e4','c5','Nc3','Nc6','g3'],desc:'Construction tranquille avec fianchette.'},{eco:'B70',name:'Sicilienne Dragon',moves:['e4','c5','Nf3','d6','d4','cxd4','Nxd4','Nf6','Nc3','g6'],desc:'Une des lignes les plus tranchantes.'},{eco:'B80',name:'Sicilienne Scheveningen',moves:['e4','c5','Nf3','d6','d4','cxd4','Nxd4','Nf6','Nc3','e6'],desc:'Systeme flexible, arme de Kasparov.'},{eco:'B90',name:'Sicilienne Najdorf',moves:['e4','c5','Nf3','d6','d4','cxd4','Nxd4','Nf6','Nc3','a6'],desc:'La plus riche en theorie.'},{eco:'C00',name:'Defense Francaise',moves:['e4','e6'],desc:'Defense solide avec structure saine.'},{eco:'C02',name:'Francaise Avancee',moves:['e4','e6','d4','d5','e5'],desc:'Les Blancs gagnent de l\'espace.'},{eco:'C21',name:'Gambit Danois',moves:['e4','e5','d4','exd4','c3'],desc:'Sacrifice pour developpement rapide.'},{eco:'C30',name:'Gambit du Roi',moves:['e4','e5','f4'],desc:'Gambit romantique du XIXe siecle.'},{eco:'C40',name:'Defense Petrov',moves:['e4','e5','Nf3','Nf6'],desc:'Attaque symetrique, tres solide.'},{eco:'C41',name:'Defense Philidor',moves:['e4','e5','Nf3','d6'],desc:'Solide mais passif.'},{eco:'C45',name:'Partie Ecossaise',moves:['e4','e5','Nf3','Nc6','d4'],desc:'Ouverture du centre immediate.'},{eco:'C50',name:'Partie Italienne',moves:['e4','e5','Nf3','Nc6','Bc4'],desc:'Vise f7, jeu tactique riche.'},{eco:'C51',name:'Gambit Evans',moves:['e4','e5','Nf3','Nc6','Bc4','Bc5','b4'],desc:'Sacrifice romantique du pion b.'},{eco:'C57',name:'Deux Cavaliers Foie Frit',moves:['e4','e5','Nf3','Nc6','Bc4','Nf6','Ng5','d5','exd5','Nxd5','Nxf7'],desc:'Sacrifice spectaculaire sur f7.'},{eco:'C60',name:'Ruy Lopez',moves:['e4','e5','Nf3','Nc6','Bb5'],desc:'L\'ouverture la plus classique.'},{eco:'C65',name:'Ruy Lopez Berlin',moves:['e4','e5','Nf3','Nc6','Bb5','Nf6'],desc:'Le Mur de Berlin, ultra-solide.'},{eco:'D02',name:'Systeme de Londres',moves:['d4','d5','Nf3','Nf6','Bf4'],desc:'Ouverture solide, populaire en club.'},{eco:'D06',name:'Gambit de la Dame',moves:['d4','d5','c4'],desc:'Grand classique positionnel.'},{eco:'D10',name:'Defense Slave',moves:['d4','d5','c4','c6'],desc:'Defense solide sans bloquer le fou.'},{eco:'D20',name:'Gambit de la Dame Accepte',moves:['d4','d5','c4','dxc4'],desc:'Les Noirs acceptent le gambit.'},{eco:'D30',name:'Gambit de la Dame Refuse',moves:['d4','d5','c4','e6'],desc:'La reponse classique et solide.'},{eco:'D43',name:'Defense Semi-Slave',moves:['d4','d5','c4','c6','Nc3','Nf6','Nf3','e6'],desc:'Riche combinaison de Slave et GDR.'},{eco:'D70',name:'Defense Grunfeld',moves:['d4','Nf6','c4','g6','Nc3','d5'],desc:'Attaque le centre blanc avec les pieces.'},{eco:'E00',name:'Ouverture Catalane',moves:['d4','Nf6','c4','e6','g3'],desc:'Pression et fianchette royale.'},{eco:'E10',name:'Indienne de la Dame',moves:['d4','Nf6','c4','e6','Nf3','b6'],desc:'Fianchette sur la grande diagonale.'},{eco:'E20',name:'Nimzo-Indienne',moves:['d4','Nf6','c4','e6','Nc3','Bb4'],desc:'Les Noirs clouent le cavalier.'},{eco:'E60',name:'Indienne du Roi',moves:['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6'],desc:'Attaque dynamique du grand centre.'},{eco:'E80',name:'Indienne du Roi Samisch',moves:['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6','f3'],desc:'Centre massif et attaque directe.'}];
-var PC={w:{k:'\u2654',q:'\u2655',r:'\u2656',b:'\u2657',n:'\u2658',p:'\u2659'},b:{k:'\u265A',q:'\u265B',r:'\u265C',b:'\u265D',n:'\u265E',p:'\u265F'}};
+var PC={
+  w:{k:'\u265A',q:'\u265B',r:'\u265C',b:'\u265D',n:'\u265E',p:'\u265F'},
+  b:{k:'\u265A',q:'\u265B',r:'\u265C',b:'\u265D',n:'\u265E',p:'\u265F'}
+};
 
 /* ═══════════════════════════════════════════
    GAME STATE
