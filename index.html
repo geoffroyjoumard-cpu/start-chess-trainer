@@ -199,7 +199,26 @@ html,body{width:100%;height:100%;font-family:'EB Garamond',Georgia,serif;backgro
 .ai-thinking{display:none;font-size:.74rem;color:var(--gdim);font-style:italic;animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* ── AUTH MODAL ── */
+/* ── LAUNCH MODAL ── */
+.launch-modal{background:var(--panel);border:1px solid var(--gdim);border-top:3px solid var(--gold);border-radius:6px;padding:24px 22px;text-align:center;max-width:310px;width:92%;box-shadow:0 20px 60px rgba(0,0,0,.95);animation:slidein .25s}
+.launch-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);margin-bottom:18px}
+.launch-choice{display:flex;gap:10px;justify-content:center;margin-bottom:0}
+.lc-btn{flex:1;padding:14px 8px;background:var(--card);border:2px solid var(--bord2);border-radius:5px;cursor:pointer;transition:all .15s;font-family:'EB Garamond',serif;color:var(--text)}
+.lc-btn:hover{background:var(--hover);border-color:var(--gdim)}
+.lc-btn.selected{background:var(--active);border-color:var(--gold)}
+.lc-icon{font-size:1.8rem;margin-bottom:6px}
+.lc-label{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--gold)}
+.lc-sub{font-size:.72rem;color:var(--dim);margin-top:2px}
+.diff-pick{margin:16px 0 0;display:none}
+.diff-pick-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--dim);margin-bottom:8px}
+.diff-pills{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.dp{padding:6px 13px;background:var(--card);border:1px solid var(--bord2);border-radius:12px;font-family:'EB Garamond',serif;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .15s}
+.dp:hover{border-color:var(--gdim);color:var(--text)}
+.dp.sel{background:#1c1505;border-color:var(--gold);color:var(--gold)}
+.launch-go{display:none;margin-top:16px;width:100%;padding:10px;background:#1c1505;border:1px solid var(--gdim);color:var(--gold);font-family:'Playfair Display',serif;font-size:1rem;cursor:pointer;border-radius:4px;transition:all .15s}
+.launch-go:hover{background:#281e08;border-color:var(--gold)}
+.launch-close{display:block;text-align:center;margin-top:12px;font-size:.74rem;color:var(--dim);cursor:pointer}
+.launch-close:hover{color:var(--muted)}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center}
 .modal-overlay.show{display:flex;animation:fadein .25s}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
@@ -380,23 +399,16 @@ html,body{width:100%;height:100%;font-family:'EB Garamond',Georgia,serif;backgro
           <div class="sec-lbl">Historique des coups</div>
           <div class="hist-box" id="hist">Aucun coup joue.</div>
         </div>
-        <div class="diff-row" id="aiRow">
-          <span class="diff-lbl">IA :</span>
-          <select class="diff-sel" id="diffSel">
-            <option value="1">Debutant</option>
-            <option value="2" selected>Intermediaire</option>
-            <option value="3">Avance</option>
-            <option value="4">Expert</option>
-          </select>
+        <div style="display:flex;align-items:center;gap:6px">
           <button class="btn" id="soundBtn" onclick="toggleSound()" style="padding:4px 9px;font-size:.78rem">&#128266;</button>
+          <div class="ai-thinking" id="aiThink" style="font-size:.74rem;color:var(--gdim);font-style:italic;animation:pulse 1s infinite;display:none">&#9203; IA reflechit...</div>
         </div>
-        <div class="ai-thinking" id="aiThink">&#9203; IA reflechit...</div>
         <div class="brow">
-          <button class="btn gold" onclick="doReset()">&#8635; Reset</button>
-          <button class="btn" id="aiBtn" onclick="doAI()">Jouer IA</button>
-          <button class="btn" onclick="doUndo()">Annuler</button>
+          <button class="btn gold" onclick="openLaunchModal()" style="flex:1">&#9654; Nouvelle partie</button>
+          <button class="btn" onclick="doReset()">&#8635;</button>
+          <button class="btn" onclick="doUndo()">&#8592;</button>
         </div>
-        <div class="hint">Cliquez une piece puis la case de destination.</div>
+        <div class="hint" id="gameHint">Lancez une partie ou explorez les ouvertures.</div>
       </div>
     </div>
   </div>
@@ -445,6 +457,36 @@ html,body{width:100%;height:100%;font-family:'EB Garamond',Georgia,serif;backgro
       </div>
       <span class="auth-close" onclick="closeAuthModal()">Fermer</span>
     </div>
+  </div>
+</div>
+
+<!-- LAUNCH MODAL -->
+<div class="modal-overlay" id="launchModal">
+  <div class="launch-modal">
+    <div class="launch-title">&#9822; Lancer une partie</div>
+    <div class="launch-choice">
+      <div class="lc-btn" id="lcJcAI" onclick="selectMode('ai')">
+        <div class="lc-icon">&#129503;</div>
+        <div class="lc-label">vs IA</div>
+        <div class="lc-sub">Jouer contre<br>l'ordinateur</div>
+      </div>
+      <div class="lc-btn" id="lcJcJ" onclick="selectMode('jcj')">
+        <div class="lc-icon">&#128101;</div>
+        <div class="lc-label">JcJ Local</div>
+        <div class="lc-sub">2 joueurs sur<br>le meme appareil</div>
+      </div>
+    </div>
+    <div class="diff-pick" id="diffPick">
+      <div class="diff-pick-lbl">Choisir la difficulte</div>
+      <div class="diff-pills">
+        <div class="dp" onclick="selectDiff(1,this)">Debutant</div>
+        <div class="dp sel" onclick="selectDiff(2,this)">Intermediaire</div>
+        <div class="dp" onclick="selectDiff(3,this)">Avance</div>
+        <div class="dp" onclick="selectDiff(4,this)">Expert</div>
+      </div>
+    </div>
+    <button class="launch-go" id="launchGo" onclick="launchGame()">&#9654; Jouer !</button>
+    <span class="launch-close" onclick="closeLaunchModal()">Annuler</span>
   </div>
 </div>
 
@@ -783,11 +825,15 @@ function proposeMatch(fp){
 function closeInvModal(){document.getElementById('invModal').classList.remove('show');pendingMatchFriend=null;}
 function startFriendMatch(){
   closeInvModal();if(!pendingMatchFriend)return;
-  twoPlayerMode=true;twoPlayerNames=[currentPseudo||'Blancs',pendingMatchFriend.pseudo];
+  var friendName=pendingMatchFriend.pseudo;
+  doReset();
+  twoPlayerMode=true;aiAutoMode=false;
+  twoPlayerNames=[currentPseudo||'Blancs',friendName];
   var b=document.getElementById('twopBanner');b.style.display='block';
-  b.textContent='\u2658 '+twoPlayerNames[0]+' (Blancs) vs '+twoPlayerNames[1]+' (Noirs)';
-  document.getElementById('aiRow').style.display='none';document.getElementById('aiBtn').style.display='none';
-  doReset();if(window.innerWidth<=680)closeSidebar();
+  b.textContent='\u2658 '+twoPlayerNames[0]+' (Blancs) vs '+twoPlayerNames[1]+' (Noirs) — Passez le telephone !';
+  document.getElementById('gameHint').textContent='Partie locale a 2 joueurs.';
+  renderBoard();
+  if(window.innerWidth<=680)closeSidebar();
 }
 
 /* ═══ SKINS ═══ */
@@ -858,6 +904,54 @@ var PC={w:{k:'\u265A\uFE0E',q:'\u265B\uFE0E',r:'\u265C\uFE0E',b:'\u265D\uFE0E',n
 var game,selSq=null,legalT=[],lmFrom=null,lmTo=null;
 var guideMode=false,guideStep=0,guideOp=null,activeIdx=-1,movStack=[];
 var aiRunning=false;
+var aiAutoMode=false; /* true = AI plays automatically after player */
+var aiDepth=2;
+
+/* ═══ LAUNCH MODAL ═══ */
+var launchMode='ai'; /* 'ai' or 'jcj' */
+
+function openLaunchModal(){
+  launchMode='ai';
+  document.getElementById('lcJcAI').classList.add('selected');
+  document.getElementById('lcJcJ').classList.remove('selected');
+  document.getElementById('diffPick').style.display='block';
+  document.getElementById('launchGo').style.display='block';
+  document.getElementById('launchModal').classList.add('show');
+}
+function closeLaunchModal(){document.getElementById('launchModal').classList.remove('show');}
+
+function selectMode(mode){
+  launchMode=mode;
+  document.getElementById('lcJcAI').classList.toggle('selected',mode==='ai');
+  document.getElementById('lcJcJ').classList.toggle('selected',mode==='jcj');
+  document.getElementById('diffPick').style.display=mode==='ai'?'block':'none';
+  document.getElementById('launchGo').style.display='block';
+}
+
+function selectDiff(val,el){
+  aiDepth=val;
+  document.querySelectorAll('.dp').forEach(function(d){d.classList.remove('sel');});
+  el.classList.add('sel');
+}
+
+function launchGame(){
+  closeLaunchModal();
+  doReset();
+  if(launchMode==='jcj'){
+    twoPlayerMode=true;
+    twoPlayerNames=[currentPseudo||'Blancs','Joueur 2'];
+    aiAutoMode=false;
+    var b=document.getElementById('twopBanner');
+    b.style.display='block';
+    b.textContent='\u2658 '+twoPlayerNames[0]+' (Blancs) vs '+twoPlayerNames[1]+' (Noirs) — Passez le telephone !';
+  }else{
+    twoPlayerMode=false;
+    aiAutoMode=true;
+    document.getElementById('twopBanner').style.display='none';
+    document.getElementById('gameHint').textContent='Jouez les Blancs — l\'IA joue automatiquement.';
+  }
+  renderBoard();
+}
 
 function init(){
   if(typeof Chess==='undefined'){document.querySelector('.main').innerHTML="<div style='color:var(--gold);padding:40px;text-align:center'>Moteur chess.js non charge.</div>";return;}
@@ -929,6 +1023,8 @@ function checkEndGame(){
 function handleClick(sq){
   if(guideMode||aiRunning)return;
   if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();
+  /* In auto-AI mode, only whites (player) can click */
+  if(aiAutoMode&&game.turn()==='b')return;
   var piece=game.get(sq);
   if(selSq){
     if(legalT.indexOf(sq)!==-1){
@@ -938,7 +1034,12 @@ function handleClick(sq){
         if(game.game_over())checkEndGame();
         else if(game.in_check())sndCheck();
         else if(wasCapture||mv.flags.indexOf('e')!==-1)sndCapture();
-        else sndMove();}
+        else sndMove();
+        /* Auto AI */
+        if(aiAutoMode&&!game.game_over()){
+          setTimeout(function(){doAI();},320);
+        }
+      }
       selSq=null;legalT=[];renderBoard();return;
     }
     if(piece&&piece.color===game.turn()){sndSelect();selSq=sq;legalT=game.moves({square:sq,verbose:true}).map(function(m){return m.to;});}
@@ -1010,11 +1111,12 @@ function freePlay(){guideMode=false;document.getElementById('sbar').style.displa
 function doReset(){
   game=new Chess();selSq=null;legalT=[];lmFrom=null;lmTo=null;
   guideMode=false;guideOp=null;guideStep=0;activeIdx=-1;movStack=[];aiRunning=false;
+  aiAutoMode=false;twoPlayerMode=false;twoPlayerNames=['Blancs','Noirs'];
   document.getElementById('oc').style.display='none';
   document.getElementById('sbar').style.display='none';
   document.getElementById('aiThink').style.display='none';
-  document.getElementById('aiBtn').disabled=false;
-  if(!twoPlayerMode){document.getElementById('twopBanner').style.display='none';document.getElementById('aiRow').style.display='flex';document.getElementById('aiBtn').style.display='inline-block';}
+  document.getElementById('twopBanner').style.display='none';
+  document.getElementById('gameHint').textContent='Lancez une partie ou explorez les ouvertures.';
   renderBoard();renderList();
 }
 
@@ -1029,14 +1131,16 @@ function doUndo(){
 
 function doAI(){
   if(guideMode||aiRunning||game.game_over()||twoPlayerMode)return;
-  var depth=parseInt(document.getElementById('diffSel').value)||2;
-  aiRunning=true;document.getElementById('aiThink').style.display='block';document.getElementById('aiBtn').disabled=true;
+  aiRunning=true;
+  document.getElementById('aiThink').style.display='block';
   setTimeout(function(){
-    var best=getBest(game,depth);
+    var best=getBest(game,aiDepth);
     if(best){var wasCapture=!!game.get(best.substring(2,4));var mv=game.move(best);
       if(mv){lmFrom=mv.from;lmTo=mv.to;movStack.push({f:mv.from,t:mv.to});
         if(game.game_over())checkEndGame();else if(game.in_check())sndCheck();else if(wasCapture||mv.flags.indexOf('e')!==-1)sndCapture();else sndMove();}}
-    selSq=null;legalT=[];aiRunning=false;document.getElementById('aiThink').style.display='none';document.getElementById('aiBtn').disabled=false;renderBoard();
+    selSq=null;legalT=[];aiRunning=false;
+    document.getElementById('aiThink').style.display='none';
+    renderBoard();
   },20);
 }
 
