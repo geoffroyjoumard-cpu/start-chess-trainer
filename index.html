@@ -1032,32 +1032,36 @@ function renderBoard(){
 
 function checkEndGame(){
   if(!game.game_over())return;
-  setTimeout(async function(){
+  setTimeout(function(){
     var h=game.history().length;
     var diffNames={1:'Debutant',2:'Intermediaire',3:'Avance',4:'Expert'};
     var diffName=diffNames[aiDepth]||'IA';
+
     if(game.in_checkmate()){
       var winner=game.turn()==='w'?'Noirs':'Blancs';
       var wName=twoPlayerMode?twoPlayerNames[game.turn()==='w'?1:0]:winner;
       sndMate();
+      /* Afficher le modal EN PREMIER */
       if(!guideMode){
         var playerWon=(game.turn()==='b');
         if(twoPlayerMode){
-          await saveGameResult(playerWon?'win':'loss','Match vs '+twoPlayerNames[1]+' — '+(playerWon?twoPlayerNames[0]:twoPlayerNames[1])+' gagne en '+h+' coups');
           showModal('\uD83C\uDFC6','Echec et mat !',wName+' remporte la partie !<br><small>Partie en '+h+' coups.</small>');
+          saveGameResult(playerWon?'win':'loss','Match vs '+twoPlayerNames[1]+' — '+(playerWon?twoPlayerNames[0]:twoPlayerNames[1])+' gagne en '+h+' coups');
         }else{
-          await saveGameResult(playerWon?'win':'loss',(playerWon?'Victoire':'Defaite')+' vs IA ('+diffName+') en '+h+' coups');
           showModal(playerWon?'\uD83C\uDFC6':'\u265E','Echec et mat !',(playerWon?'Bravo '+(currentPseudo||'vous')+' ! Vous gagnez !':'L\'IA l\'emporte !')+'<br><small>Partie en '+h+' coups.</small>');
+          saveGameResult(playerWon?'win':'loss',(playerWon?'Victoire':'Defaite')+' vs IA ('+diffName+') en '+h+' coups');
         }
       }else{
         showModal('\u265E','Echec et mat !','Les '+winner+' gagnent !');
       }
+
     }else if(game.in_stalemate()){
-      if(!guideMode)await saveGameResult('draw','Pat en '+h+' coups');
-      showModal('\uD83D\uDD04','Pat !','Aucun coup legal — la partie est nulle.');
+      showModal('\uD83D\uDD04','Pat !','Aucun coup legal disponible — la partie est nulle.');
+      if(!guideMode)saveGameResult('draw','Pat en '+h+' coups');
+
     }else if(game.in_draw()){
-      if(!guideMode)await saveGameResult('draw','Nulle en '+h+' coups');
       showModal('\uD83D\uDD04','Nulle !','La partie se termine par la nulle.');
+      if(!guideMode)saveGameResult('draw','Nulle en '+h+' coups');
     }
   },400);
 }
