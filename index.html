@@ -690,7 +690,16 @@ function renderAvatarDisplay(){
 }
 
 async function refreshPlayerData(){
-  if(!currentPseudo||!db){updateProfilePanel();return;}
+  if(!currentPseudo||!db){
+    /* Charger depuis localStorage si pas connecté */
+    try{
+      var lh=localStorage.getItem('chess_history_'+(currentPseudo||'guest'));
+      var ls=localStorage.getItem('chess_stats_'+(currentPseudo||'guest'));
+      if(lh)gameHistory=JSON.parse(lh);
+      if(ls)stats=JSON.parse(ls);
+    }catch(e){}
+    updateProfilePanel();return;
+  }
   try{
     var res=await db.from('players').select('*').eq('pseudo',currentPseudo).single();
     if(res.data){
@@ -699,8 +708,26 @@ async function refreshPlayerData(){
       memberSince=new Date(res.data.created_at).toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
     }
     var hRes=await db.from('game_history').select('*').eq('player_pseudo',currentPseudo).order('played_at',{ascending:false}).limit(20);
-    if(hRes.data)gameHistory=hRes.data;
-  }catch(e){}
+    if(hRes.data&&hRes.data.length>0){
+      gameHistory=hRes.data;
+      /* Mettre a jour le localStorage avec les donnees du serveur */
+      try{localStorage.setItem('chess_history_'+currentPseudo,JSON.stringify(gameHistory));}catch(e){}
+    }else{
+      /* Fallback : recuperer depuis localStorage si DB vide */
+      try{
+        var lh2=localStorage.getItem('chess_history_'+currentPseudo);
+        if(lh2)gameHistory=JSON.parse(lh2);
+      }catch(e){}
+    }
+  }catch(e){
+    /* Fallback total sur localStorage */
+    try{
+      var lh3=localStorage.getItem('chess_history_'+currentPseudo);
+      var ls3=localStorage.getItem('chess_stats_'+currentPseudo);
+      if(lh3)gameHistory=JSON.parse(lh3);
+      if(ls3)stats=JSON.parse(ls3);
+    }catch(e2){}
+  }
   updateProfilePanel();
 }
 
@@ -724,8 +751,15 @@ function renderGameHistory(){
 
 async function saveGameResult(result,details){
   if(result==='win')stats.w++;else if(result==='loss')stats.l++;else stats.d++;
-  gameHistory.unshift({result:result,details:details,played_at:new Date().toISOString()});
+  var entry={result:result,details:details,played_at:new Date().toISOString()};
+  gameHistory.unshift(entry);
   if(gameHistory.length>20)gameHistory.pop();
+  /* Sauvegarde locale immediate (backup si déconnexion) */
+  try{
+    var key='chess_history_'+(currentPseudo||'guest');
+    localStorage.setItem(key,JSON.stringify(gameHistory));
+    localStorage.setItem('chess_stats_'+(currentPseudo||'guest'),JSON.stringify(stats));
+  }catch(e){}
   updateProfilePanel();
   if(!db||!currentPseudo)return;
   try{
@@ -1000,6 +1034,8 @@ function checkEndGame(){
   if(!game.game_over())return;
   setTimeout(async function(){
     var h=game.history().length;
+    var diffNames={1:'Debutant',2:'Intermediaire',3:'Avance',4:'Expert'};
+    var diffName=diffNames[aiDepth]||'IA';
     if(game.in_checkmate()){
       var winner=game.turn()==='w'?'Noirs':'Blancs';
       var wName=twoPlayerMode?twoPlayerNames[game.turn()==='w'?1:0]:winner;
@@ -1007,16 +1043,22 @@ function checkEndGame(){
       if(!guideMode){
         var playerWon=(game.turn()==='b');
         if(twoPlayerMode){
-          await saveGameResult(playerWon?'win':'loss','Match vs '+twoPlayerNames[1]+' — '+(playerWon?twoPlayerNames[0]:twoPlayerNames[1])+' gagne');
+          await saveGameResult(playerWon?'win':'loss','Match vs '+twoPlayerNames[1]+' — '+(playerWon?twoPlayerNames[0]:twoPlayerNames[1])+' gagne en '+h+' coups');
           showModal('\uD83C\uDFC6','Echec et mat !',wName+' remporte la partie !<br><small>Partie en '+h+' coups.</small>');
         }else{
-          var diff=document.getElementById('diffSel').options[document.getElementById('diffSel').selectedIndex].text;
-          await saveGameResult(playerWon?'win':'loss',(playerWon?'Victoire':'Defaite')+' vs IA ('+diff+') en '+h+' coups');
-          showModal(playerWon?'\uD83C\uDFC6':'\u265E','Echec et mat !',(playerWon?'Bravo '+currentPseudo+' !':'L\'IA l\'emporte.')+'<br><small>Partie en '+h+' coups.</small>');
+          await saveGameResult(playerWon?'win':'loss',(playerWon?'Victoire':'Defaite')+' vs IA ('+diffName+') en '+h+' coups');
+          showModal(playerWon?'\uD83C\uDFC6':'\u265E','Echec et mat !',(playerWon?'Bravo '+(currentPseudo||'vous')+' ! Vous gagnez !':'L\'IA l\'emporte !')+'<br><small>Partie en '+h+' coups.</small>');
         }
-      }else showModal('\u265E','Echec et mat !','Les '+winner+' gagnent !');
-    }else if(game.in_stalemate()){if(!guideMode)await saveGameResult('draw','Pat en '+h+' coups');showModal('\uD83D\uDD04','Pat !','La partie est nulle.');}
-    else if(game.in_draw()){if(!guideMode)await saveGameResult('draw','Nulle en '+h+' coups');showModal('\uD83D\uDD04','Nulle !','La partie se termine par la nulle.');}
+      }else{
+        showModal('\u265E','Echec et mat !','Les '+winner+' gagnent !');
+      }
+    }else if(game.in_stalemate()){
+      if(!guideMode)await saveGameResult('draw','Pat en '+h+' coups');
+      showModal('\uD83D\uDD04','Pat !','Aucun coup legal — la partie est nulle.');
+    }else if(game.in_draw()){
+      if(!guideMode)await saveGameResult('draw','Nulle en '+h+' coups');
+      showModal('\uD83D\uDD04','Nulle !','La partie se termine par la nulle.');
+    }
   },400);
 }
 
